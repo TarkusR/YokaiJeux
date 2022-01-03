@@ -9,9 +9,10 @@ import java.util.Objects;
 public class UI {
     GameManager gm;
     JFrame window ;
-    public JTextArea messageText;
+    public JTextArea[] messageText= new JTextArea[20];
     public JPanel bgPanel[] = new JPanel[20];
     public JLabel bgLabel[]= new JLabel[20];
+    public int textCounter= 0;
 
 
 
@@ -31,6 +32,7 @@ public class UI {
     }
 
     public void createTextObject(int boundPosX, int boundPosY, int boundWidth, int boundHeight, String textArea,String command, Color bgColor){
+        this.textCounter++;
         final JTextArea messageText = new JTextArea(textArea);
         messageText.setBounds(boundPosX,boundPosY,boundWidth,boundHeight);
         messageText.setBackground(bgColor);
@@ -44,15 +46,18 @@ public class UI {
             public void mouseClicked(MouseEvent e) {
                 switch(command){
                     case "pressEnter" : gm.sChanger.showMenuPrincipale(); break;
-                    case "newGame":  break;
+                    case "newGame": gm.sChanger.showNewGame(); break;
                     case "scores" :  break;
                     case "options":  break;
                     case "quit" :  window.dispose(); break;
+                    case "playerSelect" : break;
                 }
             }
             public void mousePressed(MouseEvent e) {
+
             }
             public void mouseReleased(MouseEvent e) {
+
             }
             public void mouseEntered(MouseEvent e) {
                 messageText.setFont(new Font("Pristina",Font.BOLD,26));
@@ -61,8 +66,8 @@ public class UI {
                 messageText.setFont(new Font("Pristina",Font.PLAIN,26));
             }
         });
-        this.messageText=messageText;
-        window.add(messageText);
+        this.messageText[textCounter]=messageText;
+        window.add(this.messageText[textCounter]);
         window.setResizable(false);
     }
 
@@ -78,7 +83,7 @@ public class UI {
         bgLabel[bgNum].setIcon(bgIcon);
     }
 
-    public void createObject(int bgNumber,int objx,int objy, int objWidth,int objHeight, String objFileName){
+    public void createObject(int bgNumber,int objx,int objy, int objWidth,int objHeight, String objFileName,String command){
 
         JLabel objectLabel = new JLabel();
         objectLabel.setBounds(objx,objy,objWidth,objHeight);
@@ -86,7 +91,27 @@ public class UI {
         ImageIcon objectIcon = new ImageIcon(getClass().getResource(objFileName));
         objectLabel.setIcon(objectIcon);
 
+        objectLabel.addMouseListener(new MouseListener() {
 
+            public void mouseClicked(MouseEvent e) {
+                switch(command){
+                    case "null": break;
+                }
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+            public void mouseReleased(MouseEvent e) {
+
+            }
+            public void mouseEntered(MouseEvent e) {
+
+            }
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
         bgPanel[bgNumber].add(objectLabel);
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
     }
@@ -100,7 +125,12 @@ public class UI {
 
         //Ecran Principale
         createBackground(2,"/res/LogoMPBlanc.png",Color.black);
-        createObject(2,0,0,150,75,"/res/LogoIsep.png");
+        createObject(2,0,0,150,75,"/res/LogoIsep.png","null");
         bgPanel[2].add(bgLabel[2]);
+
+        // Nouvelle Partie
+
+        createBackground(3,"/res/PanelAlt.png",Color.black);
+        bgPanel[3].add(bgLabel[3]);
     }
 }
