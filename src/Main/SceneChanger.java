@@ -35,10 +35,6 @@ public class SceneChanger {
     public void showMenuPrincipale(){
         gm.ui.bgPanel[1].setVisible(false);
         gm.ui.bgPanel[2].setVisible(true);
-        deleteText();
-        gm.ui.createTextObject(75,600,150,30,"Nouvelle Partie","newGame",Color.black);
-        gm.ui.createTextObject(75,650,140,30,"Scores","scores",Color.black);
-        gm.ui.createTextObject(75,700,140,30,"Quitter","quit",Color.black);
     }
 
     public void showScores(){
@@ -48,8 +44,10 @@ public class SceneChanger {
     public void showNewGame(){
         gm.ui.bgPanel[2].setVisible(false);
         gm.ui.bgPanel[3].setVisible(true);
-        deleteText();
+    }
 
-
+    public void showMPNewGame(){
+        gm.ui.bgPanel[3].setVisible(false);
+        gm.ui.bgPanel[2].setVisible(true);
     }
 }
