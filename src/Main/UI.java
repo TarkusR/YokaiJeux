@@ -1,5 +1,7 @@
 package Main;
 
+import com.gamelogic.yokai.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -13,7 +15,10 @@ public class UI {
     public JPanel bgPanel[] = new JPanel[20];
     public JLabel bgLabel[]= new JLabel[50];
     public int textCounter= 0;
-
+    public int playerAmount= 0;
+    public int difficulty = 0;
+    public String gameType = "null";
+    public Player scoreName = new Player("");
 
 
     public UI(GameManager gm){
