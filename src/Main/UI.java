@@ -25,6 +25,7 @@ public class UI {
     public void createWindow(){
         window = new JFrame();
         window.setSize(1200,900);
+        window.setTitle("Yokai");
         window.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/res/icon.png")));
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.getContentPane().setBackground(Color.black);
@@ -109,6 +110,7 @@ public class UI {
                     case "3P" : break;
                     case "4P" : break;
                     case "5P" : break;
+                    case "validNewGame" : gm.sChanger.showGamePanel();break;
                 }
             }
 
@@ -160,6 +162,7 @@ public class UI {
         bgPanel[3].add(bgLabel[3]);
 
         //Ecran de jeu
-
+        createBackground(4,"/res/gamePanel/background.png",Color.black);
+        bgPanel[4].add(bgLabel[4]);
     }
 }

@@ -50,4 +50,10 @@ public class SceneChanger {
         gm.ui.bgPanel[3].setVisible(false);
         gm.ui.bgPanel[2].setVisible(true);
     }
+
+    public void showGamePanel(){
+        gm.ui.bgPanel[3].setVisible(false);
+        gm.ui.bgPanel[4].setVisible(true);
+
+    }
 }
