@@ -89,7 +89,7 @@ public class UI {
         JLabel objectLabel = new JLabel();
         objectLabel.setBounds(objx,objy,objWidth,objHeight);
 
-        ImageIcon objectIcon = new ImageIcon(getClass().getResource(objFileName));
+        ImageIcon objectIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(objFileName)));
         objectLabel.setIcon(objectIcon);
 
         objectLabel.addMouseListener(new MouseListener() {
@@ -151,13 +151,15 @@ public class UI {
         createObject(3,100,275,350,40,"/res/newGame/textObject/2Joueur.png","2P");
         createObject(3,100,325,350,40,"/res/newGame/textObject/3Joueur.png","3P");
         createObject(3,100,375,350,40,"/res/newGame/textObject/4Joueur.png","4P");
-        createObject(3,1060,60,350,40,"/res/newGame/textObject/x.png","backNewGameMP");
+        createObject(3,1060,60,350,40,"/res/newGame/textObject/X.png","backNewGameMP");
         createObject(3,300,225,50,50,"/res/newGame/validation2.png","1P");
         createObject(3,300,275,50,50,"/res/newGame/validation2.png","2P");
         createObject(3,300,325,50,50,"/res/newGame/validation2.png","3P");
         createObject(3,300,375,50,50,"/res/newGame/validation2.png","4P");
         createObject(3,175,425,350,50,"/res/newGame/textObject/cliquerPourContinuer.png","validNewGame");
-
         bgPanel[3].add(bgLabel[3]);
+
+        //Ecran de jeu
+
     }
 }
