@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Collections;
 import java.util.Arrays;
+import Main.GameManager;
 
 public class Board {
     /* Classe représentant le plateau de jeu et en charge de la gestion de ses cartes.
@@ -23,12 +24,12 @@ public class Board {
 
 
     /*Le tableau de jeu est un tableau de carte (on peut aussi y mettre les classe enfant de carte) et si la tile est vide les 2 seul attributs importants*/
-
+    GameManager gm;
     public List<CardClue> deck;
     public List<CardClue> preparedDeck;
     private Card[][] grid;
     public static final Card nullCard = new Card("Null");
-    private static final int SIZE = 32;
+    private static final int SIZE = 10;
 
     /*Getter et Setter pour ceux-ci*/
 
@@ -75,7 +76,7 @@ public class Board {
 
     private void createDeck(int oneColors, int twoColors, int threeColors) {
         // en français pour les noms des fichiers à l'avenir
-        var colors = List.of("rouge", "vert", "violet", "bleu");
+        var colors = new ArrayList<>(List.of("rouge", "vert", "violet", "bleu"));
         int[] amounts = {oneColors, twoColors, threeColors};
 
         var tempDeck = new Vector<String>();
@@ -83,7 +84,7 @@ public class Board {
         // au vu du nombre d'exécutions de ce code et la taille de la liste,
         // la mélanger jusqu'à une trentaine fois est négligemment inefficace mais simplifie le code
         // assurant de ne pas répéter une couleur dans une même carte
-        for (int amountColors = 1; amountColors < 4; amountColors++) {
+        for (int amountColors = 1; amountColors < 3; amountColors++) {
             var clues = new Vector<List<String>>();
             for (int i = 0; i < amounts[amountColors]; i++) {
                 List<String> newClue;
@@ -107,9 +108,10 @@ public class Board {
         }
     }
 
-    public Board(int playerCount) {
+    public Board(int playerCount, GameManager gm) {
         // initialisation de la grille
-
+        int posX = 80;
+        int posY =0 ;
         grid = new Card[SIZE][SIZE];
 
         // cartes null
@@ -151,6 +153,36 @@ public class Board {
                 break;
         }
 
-        var preparedDeck = new Vector<CardClue>();
+        preparedDeck = new Vector<CardClue>();
+
+        for(int i =0; i< grid.length;i++){
+
+            for(int j = 0; j< grid.length;j++){
+
+                //debugage
+                System.out.print("|");
+                if(grid[i][j].getCardType()!= nullCard.getCardType()){
+                    //debugage
+                    System.out.print("x");
+                    //UI
+                    gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/carteFaceCachee.png");
+
+                    //mettre carte face cachée
+
+                }else{
+                    //debugage
+                    System.out.print(" ");
+                    //UI
+                    gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/carteVide.png");
+                    //mettre carte vide
+                }
+                //debugage
+                System.out.print("|");
+                posX+=100;
+            }
+            posX=80;
+            posY+=100;
+            System.out.println();
+        }
     }
 }

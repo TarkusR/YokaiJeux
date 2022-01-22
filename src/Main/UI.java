@@ -1,5 +1,6 @@
 package Main;
 
+import Event.DragAndDrop.DragPanel;
 import com.gamelogic.yokai.Player;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ public class UI {
     public JPanel bgPanel[] = new JPanel[20];
     public JLabel bgLabel[]= new JLabel[50];
     public int textCounter= 0;
-    public int playerAmount= 0;
+    public int playerAmount= 2;
     public int difficulty = 0;
     public String gameType = "null";
     public Player scoreName = new Player("");
@@ -80,6 +81,20 @@ public class UI {
 
     public void createBackground(int bgNum,String bgFilename, Color bgColor){
         bgPanel[bgNum] = new JPanel();
+        bgPanel[bgNum].setOpaque(true);
+        bgPanel[bgNum].setBounds(0,0,1200,900);
+        bgPanel[bgNum].setBackground(bgColor);
+        bgPanel[bgNum].setLayout(null);
+        window.add(bgPanel[bgNum]);
+        bgLabel[bgNum] = new JLabel();
+        bgLabel[bgNum].setBounds(0,0,1200,900);
+        ImageIcon bgIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(bgFilename)));
+        bgLabel[bgNum].setIcon(bgIcon);
+    }
+
+    public void createGridBackground(int bgNum,String bgFilename, Color bgColor){
+        bgPanel[bgNum] = new JPanel(new GridLayout(16,16,10,10));
+        bgPanel[bgNum].setOpaque(true);
         bgPanel[bgNum].setBounds(0,0,1200,900);
         bgPanel[bgNum].setBackground(bgColor);
         bgPanel[bgNum].setLayout(null);
@@ -136,6 +151,46 @@ public class UI {
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
     }
 
+    public void createMovableObject(int bgNumber, int objx, int objy, int objWidth, int objHeight, String objFileName){
+
+        JLabel objectLabel = new JLabel();
+        objectLabel.setBounds(objx,objy,objWidth,objHeight);
+        ImageIcon objectIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(objFileName)));
+
+        objectLabel.setIcon(objectIcon);
+
+        objectLabel.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        bgPanel[bgNumber].add(objectLabel);
+        bgPanel[bgNumber].add(bgLabel[bgNumber]);
+    }
+
+
+
+
     public void generateScene(){
         createWindow();
         //Ecran d'intro
@@ -167,7 +222,8 @@ public class UI {
         bgPanel[3].add(bgLabel[3]);
 
         //Ecran de jeu
-        createBackground(4,"/res/gamePanel/background.png",Color.black);
+        createGridBackground(4,"/res/gamePanel/background.png",Color.black);
+
         bgPanel[4].add(bgLabel[4]);
     }
 }

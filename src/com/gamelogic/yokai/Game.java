@@ -1,5 +1,7 @@
 package com.gamelogic.yokai;
 
+import Main.GameManager;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -47,12 +49,12 @@ public class Game {
 
 
     /* Constructeur */
-    public Game(int level, int playerCount, String gameType,Player player) {
+    public Game(int level, int playerCount, String gameType, Player player, GameManager gm) {
         this.level = level;
         this.playerCount = playerCount;
         this.gameType = gameType;
         this.player = player;
-        board = new Board(playerCount);
+        board = new Board(playerCount,gm);
         play();
     }
 
@@ -74,7 +76,7 @@ public class Game {
             //ajouter une condition sur le compteur i + determiner le joueur qui joue
 
 
-            if(nomoreclue != true){
+            if(nomoreclue==false){
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("1- Les esprits sont apaisés\n2- Les esprits ne sont pas apaisés");
                 int choix = scanner.nextInt();
