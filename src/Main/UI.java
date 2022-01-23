@@ -176,12 +176,14 @@ public class UI {
 
             public void mouseEntered(MouseEvent e) {
                 objectLabel.setBackground(Color.red);
+                System.out.println("yes");
             }
 
 
             public void mouseExited(MouseEvent e) {
                 objectLabel.setOpaque(false);
                 objectLabel.repaint();
+                System.out.println("false");
             }
         });
 

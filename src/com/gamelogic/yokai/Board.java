@@ -188,7 +188,7 @@ public class Board {
             }
             posX=425;
             posY+=100;
-            System.out.println();
+
         }
-        }
+    }
 }
