@@ -58,7 +58,5 @@ public class SceneChanger {
         gm.ui.bgPanel[3].setVisible(false);
         gm.ui.bgPanel[4].setVisible(true);
         gm.game = new Game(gm.ui.difficulty,gm.ui.playerAmount,gm.ui.gameType,gm.ui.scoreName,this.gm);
-
-
     }
 }

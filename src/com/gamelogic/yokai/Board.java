@@ -30,6 +30,7 @@ public class Board {
     private Card[][] grid;
     public static final Card nullCard = new Card("Null");
     private static final int SIZE = 10;
+    public int[][] position;
 
     /*Getter et Setter pour ceux-ci*/
 
@@ -110,10 +111,11 @@ public class Board {
 
     public Board(int playerCount, GameManager gm) {
         // initialisation de la grille
-        int posX = 80;
+        gm.ui.window.setSize(1900,1000);
+        int posX = 425;
         int posY =0 ;
         grid = new Card[SIZE][SIZE];
-
+        position = new int[SIZE * SIZE][2];
         // cartes null
 
         for (var row : grid) {
@@ -165,7 +167,9 @@ public class Board {
                     //debugage
                     System.out.print("x");
                     //UI
-                    gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/carteFaceCachee.png");
+                    position[i+j][0] = posX;
+                    position[i+j][1]= posY;
+                    gm.ui.createMovableObject(4,posX,posY,150 ,150,"/res/gamePanel/carteTexture/carteFaceCachee.png");
 
                     //mettre carte face cachée
 
@@ -173,16 +177,18 @@ public class Board {
                     //debugage
                     System.out.print(" ");
                     //UI
-                    gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/carteVide.png");
+                    position[i+j][0] = posX;
+                    position[i+j][1] = posY;
+                    gm.ui.createMovableObject(4,posX,posY,150 ,150,"/res/gamePanel/carteTexture/carteVide.png");
                     //mettre carte vide
                 }
                 //debugage
                 System.out.print("|");
                 posX+=100;
             }
-            posX=80;
+            posX=425;
             posY+=100;
             System.out.println();
         }
-    }
+        }
 }

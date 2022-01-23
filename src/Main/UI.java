@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class UI {
     GameManager gm;
-    JFrame window ;
+    public JFrame window ;
     public JTextArea[] messageText= new JTextArea[20];
     public JPanel bgPanel[] = new JPanel[20];
     public JLabel bgLabel[]= new JLabel[50];
@@ -95,12 +95,12 @@ public class UI {
     public void createGridBackground(int bgNum,String bgFilename, Color bgColor){
         bgPanel[bgNum] = new JPanel(new GridLayout(16,16,10,10));
         bgPanel[bgNum].setOpaque(true);
-        bgPanel[bgNum].setBounds(0,0,1200,900);
+        bgPanel[bgNum].setBounds(0,0,1900,1000);
         bgPanel[bgNum].setBackground(bgColor);
         bgPanel[bgNum].setLayout(null);
         window.add(bgPanel[bgNum]);
         bgLabel[bgNum] = new JLabel();
-        bgLabel[bgNum].setBounds(0,0,1200,900);
+        bgLabel[bgNum].setBounds(0,0,1900,1000);
         ImageIcon bgIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(bgFilename)));
         bgLabel[bgNum].setIcon(bgIcon);
     }
@@ -175,12 +175,13 @@ public class UI {
 
 
             public void mouseEntered(MouseEvent e) {
-
+                objectLabel.setBackground(Color.red);
             }
 
 
             public void mouseExited(MouseEvent e) {
-
+                objectLabel.setOpaque(false);
+                objectLabel.repaint();
             }
         });
 
