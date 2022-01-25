@@ -42,40 +42,26 @@ public class Board {
         return grid[position.getY()][position.getX()];
     }
 
-    /* Methode */
-    public void moveYokai(Position pastPosition, Position newPosition) {
-        // Cette fonction n'est appliquée que sur des positions valides,
-        // les appels étant déclenchés par des choix au niveau de l'interface graphique,
-        // permis uniquement sur des zones valides.
+    // debug
+    private void printGrid() {
+        for (int i = 0; i < grid.length; i++) {
 
-        int newX = newPosition.getY();
-        int newY = newPosition.getX();
-        int pastX =pastPosition.getY();
-        int pastY = pastPosition.getX();
-
-        Card temp = grid[pastY][pastX];
-        grid[pastY][pastX] = nullCard;
-        grid[newY][newX] = temp;
-        for(int i =0; i< grid.length;i++){
-
-            for(int j = 0; j< grid.length;j++){
+            for (int j = 0; j < grid.length; j++) {
 
                 //debugage
                 System.out.print("|");
-                if(grid[i][j].getCardType()!= nullCard.getCardType()){
+                if (grid[i][j] != nullCard) {
                     //debugage
                     System.out.print(grid[i][j].getCardType());
                     //UI
 
 
-
                     //mettre carte face cachée
 
-                }else{
+                } else {
                     //debugage
                     System.out.print(" ");
                     //UI
-
 
 
                     //gm.ui.createMovableObject(4,posX,posY,150 ,150,"/res/gamePanel/carteTexture/carteVide.png");
@@ -90,6 +76,151 @@ public class Board {
             System.out.println();
 
         }
+    }
+
+    /* Methode */
+    public boolean moveYokai(Position pastPosition, Position newPosition) {
+        // les mouvements proposés à la fonction sont toujours dans la grille
+        // et sur un emplacement vide
+
+        // en-dessous : FAUX ; à changer
+        // Cette fonction n'est appliquée que sur des positions valides,
+        // les appels étant déclenchés par des choix au niveau de l'interface graphique,
+        // permis uniquement sur des zones valides.
+
+        boolean validMove = false;
+
+        int newX = newPosition.getY();
+        int newY = newPosition.getX();
+        int pastX =pastPosition.getY();
+        int pastY = pastPosition.getX();
+
+        // La nouvelle position est-elle adjacente à une carte (qui n'est pas elle-même)?
+        if ((newX + 1 != pastX || newY != pastY) && newX + 1 < SIZE) {
+            if (grid[newY][newX+1] != nullCard)
+                validMove = true;
+        }
+
+        // (newX - 1 != pastX || newY != pastY)
+        if (!validMove && (newX - 1 != pastX || newY != pastY) && newX - 1 >= 0) {
+            if (grid[newY][newX-1] != nullCard)
+                validMove = true;
+        }
+
+        if (!validMove && (newX != pastX || newY + 1 != pastY) && newY + 1 < SIZE) {
+            if (grid[newY+1][newX] != nullCard)
+                validMove = true;
+        }
+
+        if (!validMove && (newX != pastX || newY - 1 != pastY) && newY - 1 >= 0) {
+            if (grid[newY-1][newX] != nullCard)
+                validMove = true;
+        }
+
+        if (!validMove)
+            return false;
+
+        // le mouvement sépare-t-il le plateau en 2 groupes ?
+        // la séparation se fait si la carte déplacée était la seule
+        // carte adjacente à l'une de ses cartes adjacentes
+
+        // gauche
+        if (pastX - 1 >= 0 && grid[pastY][pastX - 1] != nullCard) {
+            validMove = false;
+            if (pastX - 2 >= 0) {
+                if (grid[pastY][pastX-2] != nullCard)
+                    validMove = true;
+            }
+
+            if (!validMove && pastY - 1 >= 0) {
+                if (grid[pastY-1][pastX-1] != nullCard)
+                    validMove = true;
+            }
+
+            if (!validMove && pastY + 1 < SIZE) {
+                if (grid[pastY+1][pastX-1] != nullCard)
+                    validMove = true;
+            }
+        }
+
+        if (!validMove)
+            return false;
+
+        // droite
+        if (pastX + 1 < SIZE && grid[pastY][pastX + 1] != nullCard) {
+            validMove = false;
+            if (pastX + 2 < SIZE) {
+                if (grid[pastY][pastX+2] != nullCard)
+                    validMove = true;
+            }
+
+            if (!validMove && pastY - 1 >= 0) {
+                if (grid[pastY-1][pastX+1] != nullCard)
+                    validMove = true;
+            }
+
+            if (!validMove && pastY + 1 < SIZE) {
+                if (grid[pastY+1][pastX+1] != nullCard)
+                    validMove = true;
+            }
+        }
+
+        if (!validMove)
+            return false;
+
+        // haut
+        if (pastY - 1 >= 0 && grid[pastY - 1][pastX] != nullCard) {
+            validMove = false;
+            if (pastY - 2 >= 0) {
+                if (grid[pastY-2][pastX] != nullCard)
+                    validMove = true;
+            }
+
+            if (!validMove && pastX - 1 >= 0) {
+                if (grid[pastY-1][pastX-1] != nullCard)
+                    validMove = true;
+            }
+
+            if (!validMove && pastX + 1 < SIZE) {
+                if (grid[pastY-1][pastX+1] != nullCard)
+                    validMove = true;
+            }
+        }
+
+        if (!validMove)
+            return false;
+
+        // bas
+        if (pastY + 1 < SIZE && grid[pastY + 1][pastX] != nullCard) {
+            validMove = false;
+            if (pastY + 2 < SIZE) {
+                if (grid[pastY+2][pastX] != nullCard)
+                    validMove = true;
+            }
+
+            if (!validMove && pastX - 1 >= 0) {
+                if (grid[pastY+1][pastX-1] != nullCard)
+                    validMove = true;
+            }
+
+            if (!validMove && pastX + 1 < SIZE) {
+                if (grid[pastY+1][pastX+1] != nullCard)
+                    validMove = true;
+            }
+        }
+
+        if (!validMove)
+            return false;
+
+        // mouvement
+
+        Card temp = grid[pastY][pastX];
+        grid[pastY][pastX] = nullCard;
+        grid[newY][newX] = temp;
+
+        printGrid();
+
+        return true;
     }
 
 
@@ -189,10 +320,8 @@ public class Board {
         }
 
         preparedDeck = new Vector<CardClue>();
-
-
-
     }
+
  public void createGridUI(GameManager gm){
      int posX = 425;
      int posY =0 ;
@@ -204,7 +333,7 @@ public class Board {
 
              //debugage
              System.out.print("|");
-             if(grid[i][j].getCardType()!= nullCard.getCardType()){
+             if(grid[i][j] != nullCard){
                  //debugage
                  System.out.print(grid[i][j].getCardType());
                  //UI

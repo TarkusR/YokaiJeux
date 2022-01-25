@@ -11,7 +11,7 @@ public class MyMouseAdapter extends MouseAdapter {
 
     GameManager gm;
     private Point initialLoc;
-    private Point initialLocOnScreen;;
+    private Point initialLocOnScreen;
     public int[][][] position ;
 
 
@@ -64,15 +64,16 @@ public class MyMouseAdapter extends MouseAdapter {
                     if(x<=position[i][j][0]+50 && x>=position[i][j][0]-50){
 
                         if (y<=position[i][j][1]+50 && y>=position[i][j][1]-50){
-                            if(gm.game.board.getGrid()[i][j].getCardType()==gm.game.board.nullCard.getCardType()){
-                                comp.setLocation(position[i][j][0],position[i][j][1]);
-
+                            if(gm.game.board.getGrid()[i][j]==gm.game.board.nullCard){
                                 int cor1 = i;
                                 int cor2 = j;
                                 System.out.println(cor2);
                                 System.out.println(cor1);
                                 Position newPosition = new Position(cor1,cor2);
-                                gm.game.board.moveYokai(pastPosition, newPosition);
+
+                                // appliquer le mouvement s'il est valide
+                                if (gm.game.board.moveYokai(pastPosition, newPosition))
+                                    comp.setLocation(position[i][j][0],position[i][j][1]);
                                 flag = true;
                             }
 
