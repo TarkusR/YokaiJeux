@@ -19,7 +19,7 @@ public class Game {
     /* Type de partie (en ligne ou local) */
     public String gameType;
 
-    private Board board;
+    public Board board;
 
 
     /* Getter et Setter */
@@ -54,7 +54,7 @@ public class Game {
         this.playerCount = playerCount;
         this.gameType = gameType;
         this.player = player;
-        board = new Board(playerCount,gm);
+        this.board = new Board(playerCount,gm);
         play();
     }
 

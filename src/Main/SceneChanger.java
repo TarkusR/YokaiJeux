@@ -2,6 +2,7 @@ package Main;
 
 import com.gamelogic.yokai.Board;
 import com.gamelogic.yokai.Game;
+import jdk.swing.interop.SwingInterOpUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,5 +59,7 @@ public class SceneChanger {
         gm.ui.bgPanel[3].setVisible(false);
         gm.ui.bgPanel[4].setVisible(true);
         gm.game = new Game(gm.ui.difficulty,gm.ui.playerAmount,gm.ui.gameType,gm.ui.scoreName,this.gm);
+        gm.game.board.createGridUI(this.gm);
+
     }
 }

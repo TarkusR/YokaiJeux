@@ -29,8 +29,8 @@ public class Board {
     public List<CardClue> preparedDeck;
     private Card[][] grid;
     public static final Card nullCard = new Card("Null");
-    private static final int SIZE = 10;
-    public int[][] position;
+    public static final int SIZE = 10;
+    public int[][][] position;
 
     /*Getter et Setter pour ceux-ci*/
 
@@ -48,15 +48,50 @@ public class Board {
         // les appels étant déclenchés par des choix au niveau de l'interface graphique,
         // permis uniquement sur des zones valides.
 
-        int newX = newPosition.getX();
-        int newY = newPosition.getY();
-        int pastX = pastPosition.getX();
-        int pastY = pastPosition.getY();
+        int newX = newPosition.getY();
+        int newY = newPosition.getX();
+        int pastX =pastPosition.getY();
+        int pastY = pastPosition.getX();
 
         Card temp = grid[pastY][pastX];
         grid[pastY][pastX] = nullCard;
         grid[newY][newX] = temp;
+        for(int i =0; i< grid.length;i++){
+
+            for(int j = 0; j< grid.length;j++){
+
+                //debugage
+                System.out.print("|");
+                if(grid[i][j].getCardType()!= nullCard.getCardType()){
+                    //debugage
+                    System.out.print(grid[i][j].getCardType());
+                    //UI
+
+
+
+                    //mettre carte face cachée
+
+                }else{
+                    //debugage
+                    System.out.print(" ");
+                    //UI
+
+
+
+                    //gm.ui.createMovableObject(4,posX,posY,150 ,150,"/res/gamePanel/carteTexture/carteVide.png");
+                    //mettre carte vide
+                }
+                //debugage
+                System.out.print("|");
+
+
+            }
+
+            System.out.println();
+
+        }
     }
+
 
     public void placeClue(CardClue clue, Position position) {
         // Cette fonction n'est appliquée que sur des positions valides,
@@ -112,10 +147,8 @@ public class Board {
     public Board(int playerCount, GameManager gm) {
         // initialisation de la grille
         gm.ui.window.setSize(1900,1000);
-        int posX = 425;
-        int posY =0 ;
         grid = new Card[SIZE][SIZE];
-        position = new int[SIZE * SIZE][2];
+        position = new int[SIZE+1][SIZE+1][2];
         // cartes null
 
         for (var row : grid) {
@@ -125,10 +158,10 @@ public class Board {
         var yokais = new Card[16];
 
         for (int i = 0; i < 16; i+=4) {
-            yokais[i]   = new Card("Kappa");
-            yokais[i+1] = new Card("Kitsune");
-            yokais[i+2] = new Card("Oni");
-            yokais[i+3] = new Card("Rokurobi");
+            yokais[i]   = new Card("Ka");
+            yokais[i+1] = new Card("Ki");
+            yokais[i+2] = new Card("O");
+            yokais[i+3] = new Card("Ro");
         }
 
         Collections.shuffle(Arrays.asList(yokais));
@@ -157,38 +190,56 @@ public class Board {
 
         preparedDeck = new Vector<CardClue>();
 
-        for(int i =0; i< grid.length;i++){
 
-            for(int j = 0; j< grid.length;j++){
 
-                //debugage
-                System.out.print("|");
-                if(grid[i][j].getCardType()!= nullCard.getCardType()){
-                    //debugage
-                    System.out.print("x");
-                    //UI
-                    position[i+j][0] = posX;
-                    position[i+j][1]= posY;
-                    gm.ui.createMovableObject(4,posX,posY,150 ,150,"/res/gamePanel/carteTexture/carteFaceCachee.png");
+    }
+ public void createGridUI(GameManager gm){
+     int posX = 425;
+     int posY =0 ;
+     int incr = 0;
+     int incr2= 0;
+     for(int i =0; i< grid.length;i++){
 
-                    //mettre carte face cachée
+         for(int j = 0; j< grid.length;j++){
 
-                }else{
-                    //debugage
-                    System.out.print(" ");
-                    //UI
-                    position[i+j][0] = posX;
-                    position[i+j][1] = posY;
-                    gm.ui.createMovableObject(4,posX,posY,150 ,150,"/res/gamePanel/carteTexture/carteVide.png");
-                    //mettre carte vide
-                }
-                //debugage
-                System.out.print("|");
-                posX+=100;
-            }
-            posX=425;
-            posY+=100;
+             //debugage
+             System.out.print("|");
+             if(grid[i][j].getCardType()!= nullCard.getCardType()){
+                 //debugage
+                 System.out.print(grid[i][j].getCardType());
+                 //UI
 
-        }
+                 position[i][j][0] = posX;
+                 position[i][j][1] = posY;
+
+                 gm.ui.createMovableObject(4,posX,posY,80 ,80,"/res/gamePanel/carteTexture/carteFaceCachee.png");
+
+                 //mettre carte face cachée
+
+             }else{
+                 //debugage
+                 System.out.print(" ");
+                 //UI
+
+
+                 position[i][j][0] = posX;
+                 position[i][j][1] = posY;
+                 //gm.ui.createMovableObject(4,posX,posY,150 ,150,"/res/gamePanel/carteTexture/carteVide.png");
+                 //mettre carte vide
+             }
+             //debugage
+             System.out.print("|");
+             posX+=100;
+
+
+         }
+
+         posX=425;
+         posY+=100;
+         System.out.println();
+
+     }
     }
 }
+
+

@@ -1,9 +1,10 @@
 package Main;
 
-import Event.DragAndDrop.DragPanel;
+import Event.DragAndDrop.MyMouseAdapter;
 import com.gamelogic.yokai.Player;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -11,6 +12,7 @@ import java.util.Objects;
 
 public class UI {
     GameManager gm;
+    public MyMouseAdapter myMouseAdapter;
     public JFrame window ;
     public JTextArea[] messageText= new JTextArea[20];
     public JPanel bgPanel[] = new JPanel[20];
@@ -152,40 +154,21 @@ public class UI {
     }
 
     public void createMovableObject(int bgNumber, int objx, int objy, int objWidth, int objHeight, String objFileName){
-
+        myMouseAdapter = new MyMouseAdapter(gm);
+        Border outsideBorder = new LineBorder(Color.black);
+        Border insideBorder = new EmptyBorder(10,0,10,10);
         JLabel objectLabel = new JLabel();
+
+        objectLabel.setBorder(BorderFactory.createCompoundBorder(outsideBorder,insideBorder));
+        objectLabel.setOpaque(false);
+
         objectLabel.setBounds(objx,objy,objWidth,objHeight);
         ImageIcon objectIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(objFileName)));
+        objectLabel.addMouseListener(myMouseAdapter);
+        objectLabel.addMouseMotionListener(myMouseAdapter);
+        objectLabel.setPreferredSize(objectLabel.getPreferredSize());
 
         objectLabel.setIcon(objectIcon);
-
-        objectLabel.addMouseListener(new MouseListener() {
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-
-            public void mouseEntered(MouseEvent e) {
-                objectLabel.setBackground(Color.red);
-                System.out.println("yes");
-            }
-
-
-            public void mouseExited(MouseEvent e) {
-                objectLabel.setOpaque(false);
-                objectLabel.repaint();
-                System.out.println("false");
-            }
-        });
 
         bgPanel[bgNumber].add(objectLabel);
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
@@ -226,6 +209,7 @@ public class UI {
 
         //Ecran de jeu
         createGridBackground(4,"/res/gamePanel/background.png",Color.black);
+
 
         bgPanel[4].add(bgLabel[4]);
     }
