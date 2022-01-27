@@ -3,12 +3,13 @@ package com.gamelogic.yokai;
 import java.util.List;
 import java.util.Vector;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Collections;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import Main.GameManager;
+
+import javax.swing.*;
 
 public class Board {
     /* Classe représentant le plateau de jeu et en charge de la gestion de ses cartes.
@@ -30,11 +31,15 @@ public class Board {
     public List<CardClue> deck;
     public List<CardClue> preparedDeck;
     private Card[][] grid;
-    private Card[][]clueGrid;
+    public boolean noIndiceLeft =false ;
+    private CardClue[][]clueGrid;
     public static final Card nullCard = new Card("Null");
+    public static final CardClue nullCardClue = new CardClue("Null");
     public static final int SIZE = 10;
+    private static int clueDraw=0;
     public int[][][] position;
     public int[][][] positionClue;
+    private List<JLabel> labels;
 
     private Set<Card> neighbours = new HashSet<>();
 
@@ -196,7 +201,7 @@ public class Board {
                     Collections.shuffle(colors);
                     newClue = colors.subList(0, amountColors);
                 } while (clues.contains(newClue));
-
+                Collections.sort(newClue);
                 tempDeck.add(String.join("+", newClue));
             }
         }
@@ -207,8 +212,11 @@ public class Board {
         deck = new Vector<CardClue>();
 
         for (int i = 0; i < tempDeck.size(); i++) {
-            deck.add(new CardClue(tempDeck.get(i)));
+            CardClue clue = new CardClue(tempDeck.get(i));
+            clue.setClueType(tempDeck.get(i));
+            deck.add(clue);
         }
+
         System.out.println(tempDeck);
     }
 
@@ -217,7 +225,7 @@ public class Board {
         gm.ui.window.setSize(1900,1000);
         grid = new Card[SIZE][SIZE];
         position = new int[SIZE+1][SIZE+1][2];
-        clueGrid = new Card[2][5];
+        clueGrid = new CardClue[2][5];
 
 
         // cartes null
@@ -271,7 +279,7 @@ public class Board {
                 if((i+j)>=clueGrid.length){
                     clueGrid[i][j] = deck.get(i+j);
                 }else{
-                    clueGrid[i][j]= nullCard;
+                    clueGrid[i][j]= nullCardClue;
                 }
             }
         }
@@ -281,8 +289,9 @@ public class Board {
  public void createGridUI(GameManager gm){
      int posX = 1300;
      int posY =750;
-     int incr = 0;
+     int incr = 4;
      int incr2= 0;
+     labels = new ArrayList<>();
      gm.ui.createObject(4,1425,400,100,150,"/res/gamePanel/carteTexture/deckIndice.png","drawClue");
      for(int i=0;i<2;i++){
 
@@ -296,17 +305,44 @@ public class Board {
                 System.out.println("yes");
                 positionClue[i][j][0]= posX;
                 positionClue[i][j][1]=posY;
-                gm.ui.createMovableObject(4,posX,posY,80 ,80,"/res/gamePanel/carteTexture/carteFaceCachee.png",gm.ui.dragAndDropClue);
-                posX+=100;
+                System.out.println(deck.get(i+j).getClueType());
+                incr++;
+                switch(deck.get(i+j).getClueType()){
+
+                    case "bleu" :labels.add(gm.ui.createMovableObject(4,posX,posY,100,100,"/res/gamePanel/carteTexture/blue.png",gm.ui.dragAndDropClue));break;
+                    case "bleu+rouge" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuRouge.png",gm.ui.dragAndDropClue));break;
+                    case "bleu+rouge+vert" :labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuRougeVert.png",gm.ui.dragAndDropClue));break;
+                    case "bleu+vert" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuVert.png",gm.ui.dragAndDropClue));break;
+                    case "bleu+vert+violet" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuVertViolet.png",gm.ui.dragAndDropClue));break;
+                    case "bleu+violet" :labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuViolet.png",gm.ui.dragAndDropClue));break;
+                    case "bleu+violet+rouge" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuVioletRouge.png",gm.ui.dragAndDropClue));break;
+                    case "rouge" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/rouge.png",gm.ui.dragAndDropClue));break;
+                    case "vert" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/vert.png",gm.ui.dragAndDropClue)); break;
+                    case "rouge+vert": labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/vertRouge.png",gm.ui.dragAndDropClue));break;
+                    case "vert+violet" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/vertViolet.png",gm.ui.dragAndDropClue));break;
+                    case "rouge+vert+violet" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/vertVioletRouge.png",gm.ui.dragAndDropClue));break;
+                    case "violet" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/violet.png",gm.ui.dragAndDropClue));break;
+                    case "rouge+violet": labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/violetRouge.png",gm.ui.dragAndDropClue));break;
+                }
+
+
             }else{
 
 
             }
 
+            posX+=100;
          }
          posX = 1300;
          posY-=100;
+
+
      }
+     for(int i = 0 ;i< labels.size();i++){
+         labels.get(i).setVisible(false);
+     }
+
+
 
      posX = 1200;
      posY =0 ;
@@ -324,7 +360,6 @@ public class Board {
 
                  position[i][j][0] = posX;
                  position[i][j][1] = posY;
-
                  gm.ui.createMovableObject(4,posX,posY,80 ,80,"/res/gamePanel/carteTexture/carteFaceCachee.png",gm.ui.dragAndDropBoard);
 
                  //mettre carte face cachée
@@ -352,6 +387,18 @@ public class Board {
          System.out.println();
 
      }
+    }
+
+    public void drawClue(){
+        if(labels.size()>clueDraw){
+            labels.get(clueDraw).setVisible(true);
+            clueDraw++;
+            return;
+        }else{
+            noIndiceLeft = true;
+            return;
+        }
+
     }
 }
 

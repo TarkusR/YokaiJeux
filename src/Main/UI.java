@@ -145,7 +145,9 @@ public class UI {
                     case "expert"    : radioChange("difficulty", 4);break;
 
                     case "validNewGame" : gm.sChanger.showGamePanel();break;
-                    case "drawClue": break;//gm.evMP.createUIClue(4,0,0);
+                    case "drawClue":
+                        gm.game.board.drawClue();break;
+
                 }
             }
 
@@ -168,7 +170,7 @@ public class UI {
         return objectLabel;
     }
 
-    public void createMovableObject(int bgNumber, int objx, int objy, int objWidth, int objHeight, String objFileName, MouseAdapter dragDropController){
+    public JLabel createMovableObject(int bgNumber, int objx, int objy, int objWidth, int objHeight, String objFileName, MouseAdapter dragDropController){
         dragAndDropBoard=new DragAndDropBoard(gm);
         dragAndDropClue = new DragAndDropClue(gm);
         Border outsideBorder = new LineBorder(Color.black);
@@ -188,8 +190,8 @@ public class UI {
 
         bgPanel[bgNumber].add(objectLabel);
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
+        return objectLabel;
     }
-
     public void generateScene(){
         createWindow();
         //Ecran d'intro

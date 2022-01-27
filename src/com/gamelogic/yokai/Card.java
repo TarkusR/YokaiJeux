@@ -12,6 +12,8 @@ public class Card {
     private CardClue clue;
     public boolean isFixed = false;
 
+    public String clueType;
+
     public boolean isCardNear() {
         return isCardNear;
     }
@@ -25,12 +27,20 @@ public class Card {
         isFixed = true;
     }
 
+    public void setClueType(String clueType) {
+        this.clueType = clueType;
+    }
+
     public String getCardType() {
         return cardType;
     }
 
     public Card(String cardType) {
         this.cardType = cardType;
+    }
+
+    public String getClueType() {
+        return clueType;
     }
 }
 

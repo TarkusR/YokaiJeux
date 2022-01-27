@@ -11,14 +11,22 @@ public class CardClue extends Card {
     4 = placement
     */
 
-    private static String cardType = "clue";
-    private String clueType;
+    private String cardType="";
+    private String clueType="";
 
     /*super sinon intellij veux pas :/ */
 
+    public void setClueType(String clueType){
+        this.clueType=clueType;
+    }
 
-    public CardClue(String clueType) {
-        super(clueType);
+    public CardClue(String cardType) {
+        super(cardType);
+    }
+
+    @Override
+    public String getClueType() {
+        return clueType;
     }
 
     /* Methode */
