@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Collections;
 import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import Main.GameManager;
 
 public class Board {
@@ -33,6 +35,8 @@ public class Board {
     public static final int SIZE = 10;
     public int[][][] position;
     public int[][][] positionClue;
+
+    private Set<Card> neighbours = new HashSet<>();
 
     /*Getter et Setter pour ceux-ci*/
 
@@ -80,6 +84,44 @@ public class Board {
         }
     }
 
+    private void findNeighbours(int x, int y, int pastX, int pastY) {
+        if ((x + 1 != pastX || y != pastY) && x + 1 < SIZE) {
+            if (grid[y][x+1] != nullCard) {
+                if (!neighbours.contains(grid[y][x+1])) {
+                    neighbours.add(grid[y][x+1]);
+                    findNeighbours(x+1, y, pastX, pastY);
+                }
+            }
+        }
+
+        if ((x - 1 != pastX || y != pastY) && x - 1 >= 0) {
+            if (grid[y][x-1] != nullCard) {
+                if (!neighbours.contains(grid[y][x-1])) {
+                    neighbours.add(grid[y][x - 1]);
+                    findNeighbours(x - 1, y, pastX, pastY);
+                }
+            }
+        }
+
+        if ((x != pastX || y + 1 != pastY) && y + 1 < SIZE) {
+            if (grid[y+1][x] != nullCard) {
+                if (!neighbours.contains(grid[y+1][x])) {
+                    neighbours.add(grid[y + 1][x]);
+                    findNeighbours(x, y + 1, pastX, pastY);
+                }
+            }
+        }
+
+        if ((x != pastX || y - 1 != pastY) && y - 1 >= 0) {
+            if (grid[y-1][x] != nullCard) {
+                if (!neighbours.contains(grid[y-1][x])) {
+                    neighbours.add(grid[y - 1][x]);
+                    findNeighbours(x, y - 1, pastX, pastY);
+                }
+            }
+        }
+    }
+
     /* Methode */
     public boolean moveYokai(Position pastPosition, Position newPosition) {
         // les mouvements proposés à la fonction sont toujours dans la grille
@@ -97,121 +139,11 @@ public class Board {
         int pastX =pastPosition.getY();
         int pastY = pastPosition.getX();
 
-        // La nouvelle position est-elle adjacente à une carte (qui n'est pas elle-même)?
-        if ((newX + 1 != pastX || newY != pastY) && newX + 1 < SIZE) {
-            if (grid[newY][newX+1] != nullCard)
-                validMove = true;
-        }
+        neighbours.clear();
 
-        // (newX - 1 != pastX || newY != pastY)
-        if (!validMove && (newX - 1 != pastX || newY != pastY) && newX - 1 >= 0) {
-            if (grid[newY][newX-1] != nullCard)
-                validMove = true;
-        }
+        findNeighbours(newX, newY, pastX, pastY);
 
-        if (!validMove && (newX != pastX || newY + 1 != pastY) && newY + 1 < SIZE) {
-            if (grid[newY+1][newX] != nullCard)
-                validMove = true;
-        }
-
-        if (!validMove && (newX != pastX || newY - 1 != pastY) && newY - 1 >= 0) {
-            if (grid[newY-1][newX] != nullCard)
-                validMove = true;
-        }
-
-        if (!validMove)
-            return false;
-
-        // le mouvement sépare-t-il le plateau en 2 groupes ?
-        // la séparation se fait si la carte déplacée était la seule
-        // carte adjacente à l'une de ses cartes adjacentes
-
-        // gauche
-        if (pastX - 1 >= 0 && grid[pastY][pastX - 1] != nullCard) {
-            validMove = false;
-            if (pastX - 2 >= 0) {
-                if (grid[pastY][pastX-2] != nullCard)
-                    validMove = true;
-            }
-
-            if (!validMove && pastY - 1 >= 0) {
-                if (grid[pastY-1][pastX-1] != nullCard)
-                    validMove = true;
-            }
-
-            if (!validMove && pastY + 1 < SIZE) {
-                if (grid[pastY+1][pastX-1] != nullCard)
-                    validMove = true;
-            }
-        }
-
-        if (!validMove)
-            return false;
-
-        // droite
-        if (pastX + 1 < SIZE && grid[pastY][pastX + 1] != nullCard) {
-            validMove = false;
-            if (pastX + 2 < SIZE) {
-                if (grid[pastY][pastX+2] != nullCard)
-                    validMove = true;
-            }
-
-            if (!validMove && pastY - 1 >= 0) {
-                if (grid[pastY-1][pastX+1] != nullCard)
-                    validMove = true;
-            }
-
-            if (!validMove && pastY + 1 < SIZE) {
-                if (grid[pastY+1][pastX+1] != nullCard)
-                    validMove = true;
-            }
-        }
-
-        if (!validMove)
-            return false;
-
-        // haut
-        if (pastY - 1 >= 0 && grid[pastY - 1][pastX] != nullCard) {
-            validMove = false;
-            if (pastY - 2 >= 0) {
-                if (grid[pastY-2][pastX] != nullCard)
-                    validMove = true;
-            }
-
-            if (!validMove && pastX - 1 >= 0) {
-                if (grid[pastY-1][pastX-1] != nullCard)
-                    validMove = true;
-            }
-
-            if (!validMove && pastX + 1 < SIZE) {
-                if (grid[pastY-1][pastX+1] != nullCard)
-                    validMove = true;
-            }
-        }
-
-        if (!validMove)
-            return false;
-
-        // bas
-        if (pastY + 1 < SIZE && grid[pastY + 1][pastX] != nullCard) {
-            validMove = false;
-            if (pastY + 2 < SIZE) {
-                if (grid[pastY+2][pastX] != nullCard)
-                    validMove = true;
-            }
-
-            if (!validMove && pastX - 1 >= 0) {
-                if (grid[pastY+1][pastX-1] != nullCard)
-                    validMove = true;
-            }
-
-            if (!validMove && pastX + 1 < SIZE) {
-                if (grid[pastY+1][pastX+1] != nullCard)
-                    validMove = true;
-            }
-        }
-
-        if (!validMove)
+        if (neighbours.size() < 15)
             return false;
 
         // mouvement
