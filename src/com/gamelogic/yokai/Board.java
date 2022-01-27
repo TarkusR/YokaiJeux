@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 import Main.GameManager;
 
 public class Board {
@@ -37,6 +39,7 @@ public class Board {
     public int[][][] positionClue;
 
     private Set<Card> neighbours = new HashSet<>();
+    private Map<String, Set<Card>> family = new HashMap<>();
 
     /*Getter et Setter pour ceux-ci*/
 
@@ -84,39 +87,81 @@ public class Board {
         }
     }
 
-    private void findNeighbours(int x, int y, int pastX, int pastY) {
+    private void findNeighbours(int x, int y, int pastX, int pastY, boolean same) {
+        Card c;
+
         if ((x + 1 != pastX || y != pastY) && x + 1 < SIZE) {
-            if (grid[y][x+1] != nullCard) {
-                if (!neighbours.contains(grid[y][x+1])) {
-                    neighbours.add(grid[y][x+1]);
-                    findNeighbours(x+1, y, pastX, pastY);
+            c = grid[y][x+1];
+            String type = c.getCardType();
+
+            if (c != nullCard) {
+                if (same) {
+                    if (c.getCardType().equals(type) && !family.get(type).contains(c)) {
+                        family.get(type).add(c);
+                        findNeighbours(x + 1, y, pastX, pastY, true);
+                    }
+                } else {
+                    if (!neighbours.contains(c)) {
+                        neighbours.add(c);
+                        findNeighbours(x + 1, y, pastX, pastY, false);
+                    }
                 }
             }
         }
 
         if ((x - 1 != pastX || y != pastY) && x - 1 >= 0) {
-            if (grid[y][x-1] != nullCard) {
-                if (!neighbours.contains(grid[y][x-1])) {
-                    neighbours.add(grid[y][x - 1]);
-                    findNeighbours(x - 1, y, pastX, pastY);
+            c = grid[y][x-1];
+            String type = c.getCardType();
+
+            if (c != nullCard) {
+                if (same) {
+                    if (c.getCardType().equals(type) && !family.get(type).contains(c)) {
+                        family.get(type).add(c);
+                        findNeighbours(x - 1, y, pastX, pastY, true);
+                    }
+                } else {
+                    if (!neighbours.contains(c)) {
+                        neighbours.add(c);
+                        findNeighbours(x - 1, y, pastX, pastY, false);
+                    }
                 }
             }
         }
 
         if ((x != pastX || y + 1 != pastY) && y + 1 < SIZE) {
-            if (grid[y+1][x] != nullCard) {
-                if (!neighbours.contains(grid[y+1][x])) {
-                    neighbours.add(grid[y + 1][x]);
-                    findNeighbours(x, y + 1, pastX, pastY);
+            c = grid[y+1][x];
+            String type = c.getCardType();
+
+            if (c != nullCard) {
+                if (same) {
+                    if (c.getCardType().equals(type) && !family.get(type).contains(c)) {
+                        family.get(type).add(c);
+                        findNeighbours(x, y + 1, pastX, pastY, true);
+                    }
+                } else {
+                    if (!neighbours.contains(c)) {
+                        neighbours.add(c);
+                        findNeighbours(x, y + 1, pastX, pastY, false);
+                    }
                 }
             }
         }
 
         if ((x != pastX || y - 1 != pastY) && y - 1 >= 0) {
-            if (grid[y-1][x] != nullCard) {
-                if (!neighbours.contains(grid[y-1][x])) {
-                    neighbours.add(grid[y - 1][x]);
-                    findNeighbours(x, y - 1, pastX, pastY);
+            c = grid[y-1][x];
+            String type = c.getCardType();
+
+            if (c != nullCard) {
+                if (same) {
+                    if (c.getCardType().equals(type) && !family.get(type).contains(c)) {
+                        family.get(type).add(c);
+                        findNeighbours(x, y - 1, pastX, pastY, true);
+                    }
+                } else {
+                    if (!neighbours.contains(c)) {
+                        neighbours.add(c);
+                        findNeighbours(x, y - 1, pastX, pastY, false);
+                    }
                 }
             }
         }
@@ -141,7 +186,7 @@ public class Board {
 
         neighbours.clear();
 
-        findNeighbours(newX, newY, pastX, pastY);
+        findNeighbours(newX, newY, pastX, pastY, false);
 
         if (neighbours.size() < 15)
             return false;
@@ -154,10 +199,38 @@ public class Board {
         System.out.println();
         printGrid();
 
-
         return true;
     }
 
+    public boolean apaise() {
+        String[] types = {"Ka", "Ki", "O", "Ro"};
+
+        boolean breaking;
+
+        for (String type : types) {
+            family.get(type).clear();
+
+            breaking = false;
+
+            for (int x = 0; x < SIZE; x++) {
+                for (int y = 0; y < SIZE; y++) {
+                    if (grid[y][x].getCardType().equals(type)) {
+                        findNeighbours(x, y,-2, -2, true);
+
+                        if (family.get(type).size() < 3)
+                            return false;
+
+                        breaking = true;
+                        break;
+                    }
+                }
+                if (breaking)
+                    break;
+            }
+        }
+
+        return true;
+    }
 
     public void placeClue(CardClue clue, Position position) {
         // Cette fonction n'est appliquée que sur des positions valides,
@@ -197,6 +270,7 @@ public class Board {
                     newClue = colors.subList(0, amountColors);
                 } while (clues.contains(newClue));
 
+                Collections.sort(newClue);
                 tempDeck.add(String.join("+", newClue));
             }
         }
@@ -219,10 +293,10 @@ public class Board {
         position = new int[SIZE+1][SIZE+1][2];
         clueGrid = new Card[2][5];
 
-
-        // cartes null
-
-
+        family.put("Ka", new HashSet<>());
+        family.put("Ki", new HashSet<>());
+        family.put("O", new HashSet<>());
+        family.put("Ro", new HashSet<>());
 
         for (var row : grid) {
             Arrays.fill(row, nullCard);
