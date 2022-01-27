@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Objects;
+import java.util.List;
+import java.util.ArrayList;
 
 public class UI {
     GameManager gm;
@@ -23,6 +25,7 @@ public class UI {
     public String gameType = "null";
     public Player scoreName = new Player("");
 
+    private List<JLabel> labels;
 
     public UI(GameManager gm){
         this.gm=gm;
@@ -107,7 +110,7 @@ public class UI {
         bgLabel[bgNum].setIcon(bgIcon);
     }
 
-    public void createObject(int bgNumber,int objx,int objy, int objWidth,int objHeight, String objFileName,String command){
+    public JLabel createObject(int bgNumber,int objx,int objy, int objWidth,int objHeight, String objFileName,String command){
 
         JLabel objectLabel = new JLabel();
         objectLabel.setBounds(objx,objy,objWidth,objHeight);
@@ -127,11 +130,11 @@ public class UI {
                     case "quit" :  window.dispose(); break;
                     case "playerSelect" : break;
                     case "backNewGameMP" : gm.sChanger.showMPNewGame(); break;
-                    case "1P" : break;
-                    case "2P" : break;
-                    case "3P" : break;
-                    case "4P" : break;
-                    case "5P" : break;
+                    //case "1P" : radioChange("player", 2); break;
+                    case "2P" : radioChange("player", 2);break;
+                    case "3P" : radioChange("player", 3);break;
+                    case "4P" : radioChange("player", 4);break;
+                    //case "5P" : radioChange("player", 2);break;
                     case "validNewGame" : gm.sChanger.showGamePanel();break;
                 }
             }
@@ -151,6 +154,8 @@ public class UI {
         });
         bgPanel[bgNumber].add(objectLabel);
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
+
+        return objectLabel;
     }
 
     public void createMovableObject(int bgNumber, int objx, int objy, int objWidth, int objHeight, String objFileName){
@@ -174,7 +179,9 @@ public class UI {
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
     }
 
+    public void generateOptions() {
 
+    }
 
 
     public void generateScene(){
@@ -194,23 +201,57 @@ public class UI {
 
         // Nouvelle Partie
         createBackground(3,"/res/menuPrincipale/Panel.png",Color.black);
+
         createObject(3,150,150,350,40,"/res/newGame/textObject/nombreDeJoueur.png","null");
-        createObject(3,100,225,350,40,"/res/newGame/textObject/1Joueur.png","1P");
-        createObject(3,100,275,350,40,"/res/newGame/textObject/2Joueur.png","2P");
-        createObject(3,100,325,350,40,"/res/newGame/textObject/3Joueur.png","3P");
-        createObject(3,100,375,350,40,"/res/newGame/textObject/4Joueur.png","4P");
         createObject(3,1060,60,350,40,"/res/newGame/textObject/X.png","backNewGameMP");
-        createObject(3,300,225,50,50,"/res/newGame/validation2.png","1P");
-        createObject(3,300,275,50,50,"/res/newGame/validation2.png","2P");
-        createObject(3,300,325,50,50,"/res/newGame/validation2.png","3P");
-        createObject(3,300,375,50,50,"/res/newGame/validation2.png","4P");
         createObject(3,175,425,350,50,"/res/newGame/textObject/cliquerPourContinuer.png","validNewGame");
+
+        //createObject(3,100,225,350,40,"/res/newGame/textObject/1Joueur.png","1P");
+        createObject(3,100,225,350,40,"/res/newGame/textObject/2Joueur.png","2P");
+        createObject(3,100,275,350,40,"/res/newGame/textObject/3Joueur.png","3P");
+        createObject(3,100,325,350,40,"/res/newGame/textObject/4Joueur.png","4P");
+
+        labels = new ArrayList<>();
+
+        //createObject(3,300,225,50,50,"/res/newGame/validation2.png","1P");
+        labels.add(createObject(3,300,225,50,50,"/res/newGame/validation.png","2P"));
+        labels.add(createObject(3,300,275,50,50,"/res/newGame/validation2.png","3P"));
+        labels.add(createObject(3,300,325,50,50,"/res/newGame/validation2.png","4P"));
+
         bgPanel[3].add(bgLabel[3]);
 
         //Ecran de jeu
         createGridBackground(4,"/res/gamePanel/background.png",Color.black);
 
-
         bgPanel[4].add(bgLabel[4]);
+    }
+
+    private void radioChange(String type, int value) {
+        JLabel past;
+        JLabel now;
+
+        if (type.equals("player")) {
+            if (value == playerAmount)
+                return;
+
+            past = labels.get(playerAmount-2);
+            now = labels.get(value-2);
+
+            playerAmount = value;
+        } else { // "difficulty"
+            if (value == difficulty)
+                return;
+
+            past = labels.get(difficulty-1 + 3);
+            now = labels.get(difficulty-1 + 3);
+
+            difficulty = value;
+        }
+
+        ImageIcon yesIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/newGame/validation.png")));
+        ImageIcon noIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/newGame/validation2.png")));
+
+        past.setIcon(noIcon);
+        now.setIcon(yesIcon);
     }
 }
