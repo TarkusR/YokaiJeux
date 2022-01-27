@@ -30,9 +30,11 @@ public class Board {
     public List<CardClue> deck;
     public List<CardClue> preparedDeck;
     private Card[][] grid;
+    private Card[][]clueGrid;
     public static final Card nullCard = new Card("Null");
     public static final int SIZE = 10;
     public int[][][] position;
+    public int[][][] positionClue;
 
     private Set<Card> neighbours = new HashSet<>();
 
@@ -149,8 +151,9 @@ public class Board {
         Card temp = grid[pastY][pastX];
         grid[pastY][pastX] = nullCard;
         grid[newY][newX] = temp;
-
+        System.out.println();
         printGrid();
+
 
         return true;
     }
@@ -178,6 +181,7 @@ public class Board {
         var colors = new ArrayList<>(List.of("rouge", "vert", "violet", "bleu"));
         int[] amounts = {oneColors, twoColors, threeColors};
 
+
         var tempDeck = new Vector<String>();
 
         // au vu du nombre d'exécutions de ce code et la taille de la liste,
@@ -185,7 +189,7 @@ public class Board {
         // assurant de ne pas répéter une couleur dans une même carte
         for (int amountColors = 1; amountColors < 3; amountColors++) {
             var clues = new Vector<List<String>>();
-            for (int i = 0; i < amounts[amountColors]; i++) {
+            for (int i = 0; i <= amounts[amountColors]; i++) {
                 List<String> newClue;
 
                 do {
@@ -193,7 +197,7 @@ public class Board {
                     newClue = colors.subList(0, amountColors);
                 } while (clues.contains(newClue));
 
-                tempDeck.add(String.join(",", newClue));
+                tempDeck.add(String.join("+", newClue));
             }
         }
 
@@ -205,6 +209,7 @@ public class Board {
         for (int i = 0; i < tempDeck.size(); i++) {
             deck.add(new CardClue(tempDeck.get(i)));
         }
+        System.out.println(tempDeck);
     }
 
     public Board(int playerCount, GameManager gm) {
@@ -212,7 +217,12 @@ public class Board {
         gm.ui.window.setSize(1900,1000);
         grid = new Card[SIZE][SIZE];
         position = new int[SIZE+1][SIZE+1][2];
+        clueGrid = new Card[2][5];
+
+
         // cartes null
+
+
 
         for (var row : grid) {
             Arrays.fill(row, nullCard);
@@ -252,13 +262,55 @@ public class Board {
         }
 
         preparedDeck = new Vector<CardClue>();
+        prepareClue();
+
+        // Creation grille carte indice
+
+        for(int i =0; i< 2;i++){
+            for(int j= 0; j<5;j++ ){
+                if((i+j)>=clueGrid.length){
+                    clueGrid[i][j] = deck.get(i+j);
+                }else{
+                    clueGrid[i][j]= nullCard;
+                }
+            }
+        }
+        positionClue = new int[clueGrid.length][clueGrid[1].length][2];
     }
 
  public void createGridUI(GameManager gm){
-     int posX = 425;
-     int posY =0 ;
+     int posX = 1300;
+     int posY =750;
      int incr = 0;
      int incr2= 0;
+     gm.ui.createObject(4,1425,400,100,150,"/res/gamePanel/carteTexture/deckIndice.png","drawClue");
+     for(int i=0;i<2;i++){
+
+         for(int j = 0; j< 5;j++){
+
+            if(clueGrid[i][j]!= nullCard){
+                //Debugage
+                //System.out.println();
+                //UI
+                System.out.println(i);
+                System.out.println("yes");
+                positionClue[i][j][0]= posX;
+                positionClue[i][j][1]=posY;
+                gm.ui.createMovableObject(4,posX,posY,80 ,80,"/res/gamePanel/carteTexture/carteFaceCachee.png",gm.ui.dragAndDropClue);
+                posX+=100;
+            }else{
+
+
+            }
+
+         }
+         posX = 1300;
+         posY-=100;
+     }
+
+     posX = 1200;
+     posY =0 ;
+
      for(int i =0; i< grid.length;i++){
 
          for(int j = 0; j< grid.length;j++){
@@ -273,7 +325,7 @@ public class Board {
                  position[i][j][0] = posX;
                  position[i][j][1] = posY;
 
-                 gm.ui.createMovableObject(4,posX,posY,80 ,80,"/res/gamePanel/carteTexture/carteFaceCachee.png");
+                 gm.ui.createMovableObject(4,posX,posY,80 ,80,"/res/gamePanel/carteTexture/carteFaceCachee.png",gm.ui.dragAndDropBoard);
 
                  //mettre carte face cachée
 
