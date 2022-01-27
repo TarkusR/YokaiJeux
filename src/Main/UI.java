@@ -24,7 +24,7 @@ public class UI {
     public JLabel bgLabel[]= new JLabel[50];
     public int textCounter= 0;
     public int playerAmount= 2;
-    public int difficulty = 0;
+    public int difficulty = 1;
     public String gameType = "null";
     public Player scoreName = new Player("");
 
@@ -134,11 +134,16 @@ public class UI {
                     case "quit" :  window.dispose(); break;
                     case "playerSelect" : break;
                     case "backNewGameMP" : gm.sChanger.showMPNewGame(); break;
-                    //case "1P" : radioChange("player", 2); break;
+
                     case "2P" : radioChange("player", 2);break;
                     case "3P" : radioChange("player", 3);break;
                     case "4P" : radioChange("player", 4);break;
-                    //case "5P" : radioChange("player", 2);break;
+
+                    case "facile"    : radioChange("difficulty", 1);break;
+                    case "normal"    : radioChange("difficulty", 2);break;
+                    case "difficile" : radioChange("difficulty", 3);break;
+                    case "expert"    : radioChange("difficulty", 4);break;
+
                     case "validNewGame" : gm.sChanger.showGamePanel();break;
                     case "drawClue": break;//gm.evMP.createUIClue(4,0,0);
                 }
@@ -185,13 +190,6 @@ public class UI {
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
     }
 
-    public void generateOptions() {
-
-    }
-
-
-
-
     public void generateScene(){
         createWindow();
         //Ecran d'intro
@@ -214,17 +212,29 @@ public class UI {
         createObject(3,1060,60,350,40,"/res/newGame/textObject/X.png","backNewGameMP");
         createObject(3,175,425,350,50,"/res/newGame/textObject/cliquerPourContinuer.png","validNewGame");
 
-        //createObject(3,100,225,350,40,"/res/newGame/textObject/1Joueur.png","1P");
         createObject(3,100,225,350,40,"/res/newGame/textObject/2Joueur.png","2P");
         createObject(3,100,275,350,40,"/res/newGame/textObject/3Joueur.png","3P");
         createObject(3,100,325,350,40,"/res/newGame/textObject/4Joueur.png","4P");
 
         labels = new ArrayList<>();
 
-        //createObject(3,300,225,50,50,"/res/newGame/validation2.png","1P");
         labels.add(createObject(3,300,225,50,50,"/res/newGame/validation.png","2P"));
         labels.add(createObject(3,300,275,50,50,"/res/newGame/validation2.png","3P"));
         labels.add(createObject(3,300,325,50,50,"/res/newGame/validation2.png","4P"));
+
+
+
+        createObject(3,650,150,350,40,"/res/newGame/textObject/difficulte.png","null");
+
+        createObject(3,600,225,350,40,"/res/newGame/textObject/facile.png","facile");
+        createObject(3,600,275,350,40,"/res/newGame/textObject/normal.png","normal");
+        createObject(3,600,325,350,40,"/res/newGame/textObject/difficile.png","difficile");
+        createObject(3,600,375,350,40,"/res/newGame/textObject/expert.png","expert");
+
+        labels.add(createObject(3,800,225,50,50,"/res/newGame/validation.png","facile"));
+        labels.add(createObject(3,800,275,50,50,"/res/newGame/validation2.png","normal"));
+        labels.add(createObject(3,800,325,50,50,"/res/newGame/validation2.png","difficile"));
+        labels.add(createObject(3,800,375,50,50,"/res/newGame/validation2.png","expert"));
 
         bgPanel[3].add(bgLabel[3]);
 
@@ -251,7 +261,7 @@ public class UI {
                 return;
 
             past = labels.get(difficulty-1 + 3);
-            now = labels.get(difficulty-1 + 3);
+            now = labels.get(value-1 + 3);
 
             difficulty = value;
         }
