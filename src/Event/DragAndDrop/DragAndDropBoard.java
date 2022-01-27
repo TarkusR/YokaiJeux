@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class MyMouseAdapter extends MouseAdapter {
+public class DragAndDropBoard extends MouseAdapter {
 
     GameManager gm;
     private Point initialLoc;
@@ -16,7 +16,7 @@ public class MyMouseAdapter extends MouseAdapter {
 
 
 
-    public MyMouseAdapter(GameManager gm){
+    public DragAndDropBoard(GameManager gm){
         this.gm=gm;
         this.position = gm.game.board.position;
     }
@@ -53,9 +53,7 @@ public class MyMouseAdapter extends MouseAdapter {
                 if(flag){
                     break;
                 }
-
             }
-
         }
         flag = false;
         for(int i = 0 ; i< position[1].length-1;i++){
@@ -67,8 +65,6 @@ public class MyMouseAdapter extends MouseAdapter {
                             if(gm.game.board.getGrid()[i][j]==gm.game.board.nullCard){
                                 int cor1 = i;
                                 int cor2 = j;
-                                System.out.println(cor2);
-                                System.out.println(cor1);
                                 Position newPosition = new Position(cor1,cor2);
 
                                 // appliquer le mouvement s'il est valide

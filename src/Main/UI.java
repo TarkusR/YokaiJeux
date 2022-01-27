@@ -1,18 +1,21 @@
 package Main;
 
-import Event.DragAndDrop.MyMouseAdapter;
+import Event.DragAndDrop.DragAndDropBoard;
+import Event.DragAndDrop.DragAndDropClue;
 import com.gamelogic.yokai.Player;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Objects;
 
 public class UI {
     GameManager gm;
-    public MyMouseAdapter myMouseAdapter;
+    public DragAndDropBoard dragAndDropBoard;
+    public DragAndDropClue dragAndDropClue;
     public JFrame window ;
     public JTextArea[] messageText= new JTextArea[20];
     public JPanel bgPanel[] = new JPanel[20];
@@ -61,6 +64,7 @@ public class UI {
                     case "options":  break;
                     case "quit" :  window.dispose(); break;
                     case "playerSelect" : break;
+                    //case "drawClue": gm.evMP.createUIClue();break;
                 }
             }
             public void mousePressed(MouseEvent e) {
@@ -133,6 +137,7 @@ public class UI {
                     case "4P" : break;
                     case "5P" : break;
                     case "validNewGame" : gm.sChanger.showGamePanel();break;
+                    case "drawClue": break;//gm.evMP.createUIClue(4,0,0);
                 }
             }
 
@@ -153,8 +158,9 @@ public class UI {
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
     }
 
-    public void createMovableObject(int bgNumber, int objx, int objy, int objWidth, int objHeight, String objFileName){
-        myMouseAdapter = new MyMouseAdapter(gm);
+    public void createMovableObject(int bgNumber, int objx, int objy, int objWidth, int objHeight, String objFileName, MouseAdapter dragDropController){
+        dragAndDropBoard=new DragAndDropBoard(gm);
+        dragAndDropClue = new DragAndDropClue(gm);
         Border outsideBorder = new LineBorder(Color.black);
         Border insideBorder = new EmptyBorder(10,0,10,10);
         JLabel objectLabel = new JLabel();
@@ -164,8 +170,8 @@ public class UI {
 
         objectLabel.setBounds(objx,objy,objWidth,objHeight);
         ImageIcon objectIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(objFileName)));
-        objectLabel.addMouseListener(myMouseAdapter);
-        objectLabel.addMouseMotionListener(myMouseAdapter);
+        objectLabel.addMouseListener(dragDropController);
+        objectLabel.addMouseMotionListener(dragDropController);
         objectLabel.setPreferredSize(objectLabel.getPreferredSize());
 
         objectLabel.setIcon(objectIcon);
@@ -173,6 +179,8 @@ public class UI {
         bgPanel[bgNumber].add(objectLabel);
         bgPanel[bgNumber].add(bgLabel[bgNumber]);
     }
+
+
 
 
 
