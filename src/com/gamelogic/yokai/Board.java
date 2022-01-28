@@ -25,6 +25,7 @@ public class Board {
 
     /*Le tableau de jeu est un tableau de carte (on peut aussi y mettre les classe enfant de carte) et si la tile est vide les 2 seul attributs importants*/
     GameManager gm = UI.gm;
+    public int k =0;
     public List<CardClue> deck;
     public List<CardClue> preparedDeck;
     private Card[][] grid;
@@ -64,7 +65,7 @@ public class Board {
             for (int j = 0; j < grid.length; j++) {
 
                 //debugage
-                //System.out.print("|");
+                System.out.print("|");
                 if (grid[i][j] != nullCard) {
                     //debugage
                     System.out.print(grid[i][j].getCardType());
@@ -75,7 +76,7 @@ public class Board {
 
                 } else {
                     //debugage
-                    //System.out.print(" ");
+                    System.out.print(" ");
                     //UI
 
 
@@ -83,12 +84,12 @@ public class Board {
                     //mettre carte vide
                 }
                 //debugage
-                //System.out.print("|");
+                System.out.print("|");
 
 
             }
 
-            //System.out.println();
+            System.out.println();
 
         }
     }
@@ -197,13 +198,14 @@ public class Board {
             return false;
 
         // mouvement
-        labelsYokai.add((newY*SIZE)+newX,labelsYokai.get((pastY*SIZE)+pastX));
-        labelsYokai.remove(((pastY*SIZE)+pastX));
+        int mo =(pastY*SIZE)+newX;
+        labelsYokai.set((newY*SIZE)+newX,labelsYokai.get((pastY*SIZE)+pastX));
+        labelsYokai.set(mo,new JLabel());
         Card temp = grid[pastY][pastX];
         grid[pastY][pastX] = nullCard;
         grid[newY][newX] = temp;
         //System.out.println();
-        //printGrid();
+        printGrid();
         //System.out.println(apaise());
 
         turnIndice();
@@ -434,10 +436,10 @@ public class Board {
          for(int j = 0; j< grid.length;j++){
 
              //debugage
-             //System.out.print("|");
+             System.out.print("|");
              if(grid[i][j] != nullCard){
                  //debugage
-                 //System.out.print(grid[i][j].getCardType());
+                 System.out.print(grid[i][j].getCardType());
                  //UI
 
                  position[i][j][0] = posX;
@@ -447,7 +449,7 @@ public class Board {
 
              }else{
                  //debugage
-                 //System.out.print(" ");
+                 System.out.print(" ");
                  //UI
 
 
@@ -458,7 +460,7 @@ public class Board {
                  //mettre carte vide
              }
              //debugage
-             //System.out.print("|");
+             System.out.print("|");
              posX+=100;
 
 
@@ -509,7 +511,14 @@ public class Board {
         } else {
             //System.out.println(j+" "+i);
             //System.out.println(labelsYokai.size());
+            System.out.println(i+" "+j);
+            System.out.println((i*SIZE)+j+k);
+            System.out.println(labelsYokai.size());
+
+
+
             switch(card.getCardType()){
+
                 case "Ka" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteVerte.png"))));break;
                 case "Ro" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteViolette.png"))));break;
                 case "Ki" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteRouge.png"))));break;
@@ -523,6 +532,7 @@ public class Board {
         System.out.println(returned);
 
         if (returned == 2) {
+            k++;
             return true;
         }
 

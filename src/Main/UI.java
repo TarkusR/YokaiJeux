@@ -204,8 +204,8 @@ public class UI {
         createBackground(2,"/res/menuPrincipale/LogoMPBlanc.png",Color.black);
         createObject(2,0,0,150,75,"/res/menuPrincipale/LogoIsep.png","null");
         createObject(2,100,650,350,40,"/res/menuPrincipale/textObject/nouvellePartie.png","newGame");
-        createObject(2,100,700,350,40,"/res/menuPrincipale/textObject/scores.png","scores");
-        createObject(2,100,750,350,40,"/res/menuPrincipale/textObject/quitter.png","quit");
+        //createObject(2,100,700,350,40,"/res/menuPrincipale/textObject/scores.png","scores");
+        createObject(2,100,700,350,40,"/res/menuPrincipale/textObject/quitter.png","quit");
         bgPanel[2].add(bgLabel[2]);
 
         // Nouvelle Partie
