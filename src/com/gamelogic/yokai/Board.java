@@ -512,7 +512,7 @@ public class Board {
             switch(card.getCardType()){
                 case "Ka" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteVerte.png"))));break;
                 case "Ro" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteViolette.png"))));break;
-             //   case "Ki" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteRouge.png"))));break;
+                case "Ki" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteRouge.png"))));break;
                 case "O" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteBleu.png"))));break;
             }
 
