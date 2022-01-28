@@ -592,12 +592,15 @@ public class Board {
 
     public void turnEnd() {
         gm.game.canMoveClue = false;
+
         gm.game.tour++;
+
+        if (gm.game.tour > gm.game.playerCount)
+            gm.game.tour = 1;
 
         if(labels.size()==clueDraw) {
             endGame();
         } else {
-            gm.game.tour++;
             turnBegin();
         }
     }

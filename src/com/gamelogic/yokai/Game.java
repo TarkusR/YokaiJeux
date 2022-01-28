@@ -28,7 +28,7 @@ public class Game {
     public boolean ending = false;
 
     public Board board;
-    public int tour = 0;
+    public int tour = 1;
 
     /* Getter et Setter */
     public int getLevel() {
