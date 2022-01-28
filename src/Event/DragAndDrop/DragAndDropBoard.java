@@ -28,14 +28,23 @@ public class DragAndDropBoard extends MouseAdapter {
         boolean flag = false;
         int x = locOnScreen.x - initialLocOnScreen.x + initialLoc.x;
         int y = locOnScreen.y - initialLocOnScreen.y + initialLoc.y;
-        for(int i = 0 ; i< position[1].length;i++) {
-            for (int j = 0; j < position[1].length; j++) {
-                if (initialLoc.x <= position[i][j][0] + 50 && initialLoc.x >= position[i][j][0] - 50) {
-                    if (initialLoc.y <= position[i][j][1] + 50 && initialLoc.y >= position[i][j][1] - 50) {
-                        try {
-                            gm.game.board.returnCard(i,j);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
+
+        if (gm.game.canCheckCard) {
+
+            for(int i = 0 ; i< position[1].length;i++) {
+                for (int j = 0; j < position[1].length; j++) {
+                    if (initialLoc.x <= position[i][j][0] + 50 && initialLoc.x >= position[i][j][0] - 50) {
+                        if (initialLoc.y <= position[i][j][1] + 50 && initialLoc.y >= position[i][j][1] - 50) {
+                            try {
+                                gm.game.board.returnCard(i,j);
+                                wait(3000);
+                                System.out.println("waited");
+                                if (gm.game.board.returnCard(i,j))
+                                    System.out.println("ifd");
+                                    gm.game.board.turnMove();
+                            } catch (InterruptedException ex) {
+                                ex.printStackTrace();
+                            }
                         }
                     }
                 }

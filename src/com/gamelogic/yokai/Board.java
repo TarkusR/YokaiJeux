@@ -41,6 +41,8 @@ public class Board {
     private Set<Card> neighbours = new HashSet<>();
     private Map<String, Set<Card>> family = new HashMap<>();
 
+    private int returned;
+
     /*Getter et Setter pour ceux-ci*/
 
     public Card[][] getGrid() {
@@ -199,6 +201,9 @@ public class Board {
         System.out.println();
         printGrid();
         System.out.println(apaise());
+
+        turnIndice();
+
         return true;
     }
 
@@ -459,18 +464,23 @@ public class Board {
          posY+=100;
          System.out.println();
 
+
+
      }
-     tour();
+     turnBegin();
     }
 
     public void drawClue(){
-        if(labels.size()>clueDraw){
+        if (!gm.game.canMoveClue)
+            return;
+
             labels.get(clueDraw).setVisible(true);
+            prepareClue();
+
             System.out.println(clueDraw);
             clueDraw++;
-        }else{
-            noIndiceLeft = true;
-        }
+
+            turnEnd();
     }
 
     public static void wait(int ms)
@@ -485,47 +495,102 @@ public class Board {
         }
     }
 
-    public void returnCard(int i , int j) throws InterruptedException {
-        String cardType = grid[i][j].getCardType();
-        System.out.println(j+" "+i);
-        System.out.println(labelsYokai.size());
-        switch(cardType){
-            case "Ka" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteVerte.png"))));break;
-            case "Ro" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteViolette.png"))));break;
-            case "Ki" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteRouge.png"))));break;
-            case "O" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteBleu.png"))));break;
-        }
-        grid[i][j].isReturned=true;
-        //wait(5000);
-    }
+    public boolean returnCard(int i , int j) throws InterruptedException {
+        Card card = grid[i][j];
 
-    public void returnCardCachee(int i, int j){
-        String cardType = grid[i][j].getCardType();
-        if(grid[i][j].isReturned){
-            System.out.println(j+" "+i);
-            System.out.println(labelsYokai.size());
+        if (card.isReturned) {
             labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteFaceCachee.png"))));
+            card.isReturned=false;
+            returned++;
+        } else {
+            //System.out.println(j+" "+i);
+            //System.out.println(labelsYokai.size());
+            switch(card.getCardType()){
+                case "Ka" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteVerte.png"))));break;
+                case "Ro" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteViolette.png"))));break;
+             //   case "Ki" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteRouge.png"))));break;
+                case "O" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteBleu.png"))));break;
+            }
+
+            card.isReturned=true;
+
+        }
+
+        if (returned == 2) {
+            return true;
+        }
+
+        return false;
+    }
+
+/*
+    public void play() {
+        // TODO : if indices restants (voir règles)
+        while (!ending) {
+            System.out.println("Joueur " + gm.game.tour);
+            beginTurn(); 
+        }
+    }
+    */
+
+    public void turnBegin() {
+        //System.exit(0);
+
+        System.out.println("Joueur " + gm.game.tour);
+
+        System.exit(0);
+        
+        gm.ui.labelsUI.get(0).setVisible(true); // bouton apaisé
+        gm.ui.labelsUI.get(1).setVisible(true); // question : "apaisé ?"
+        gm.ui.labelsUI.get(2).setVisible(true); // bouton non
+    }
+
+    public void endGame() {
+        gm.ui.labelsUI.get(0).setVisible(false); // bouton apaisé
+        gm.ui.labelsUI.get(1).setVisible(false); // question : "apaisé ?"
+        gm.ui.labelsUI.get(2).setVisible(false); // bouton non
+
+        gm.game.ending = true;
+
+        if (apaise()) {
+            System.out.println("GAGNE");
+        } else {
+            System.out.println("PERDU");
         }
     }
 
-    public void tour(){
-        if(!gm.game.board.apaiser && !gm.game.board.apaise()){
-            gm.ui.labelsUI.get(0).setVisible(true);
-            gm.ui.labelsUI.get(1).setVisible(true);
-            gm.ui.labelsUI.get(2).setVisible(true);
-        }else{
-            gm.game.endgame = true;
-        }
-        while(gm.game.tour!= gm.game.tour+1){
-            gm.game.canMoveCard = false;
-        }
+    // Voir 2 cartes
+    public void turnCheck() {
+        gm.ui.labelsUI.get(0).setVisible(false); // bouton apaisé
+        gm.ui.labelsUI.get(1).setVisible(false); // question : "apaisé ?"
+        gm.ui.labelsUI.get(2).setVisible(false); // bouton non
+
+        gm.game.canCheckCard = true;
+        returned = 0;
+    }
+
+    // Déplacer une carte
+    public void turnMove() {
+        gm.game.canCheckCard = false;
         gm.game.canMoveCard = true;
-        gm.ui.labelsUI.get(0).setVisible(false);
-        gm.ui.labelsUI.get(1).setVisible(false);
-        gm.ui.labelsUI.get(2).setVisible(false);
-        gm.ui.labelsUI.get(3).setVisible(true);
+    }
 
+    // Révéler indice ou en placer un
+    public void turnIndice() {
+        gm.game.canMoveCard = false;
+        gm.game.canMoveClue = true;
+    }
 
+    public void turnEnd() {
+        gm.game.canMoveClue = false;
+        gm.game.tour++;
+
+        if(labels.size()==clueDraw) {
+            endGame();
+        } else {
+            gm.game.tour++;
+            turnBegin();
+        }
     }
 }
 

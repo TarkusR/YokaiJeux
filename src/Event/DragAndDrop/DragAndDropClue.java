@@ -61,13 +61,15 @@ public class DragAndDropClue extends MouseAdapter {
                 if(x<=position[i][j][0]+50 && x>=position[i][j][0]-50){
 
                     if (y<=position[i][j][1]+50 && y>=position[i][j][1]-50){
-                        if(gm.game.board.getGrid()[i][j] != gm.game.board.nullCard&& gm.game.canMoveCard){
+                        if(gm.game.board.getGrid()[i][j] != gm.game.board.nullCard && gm.game.canMoveClue){
                             int cor1 = i;
                             int cor2 = j;
                             Position newPosition = new Position(cor1,cor2);
                             // appliquer le mouvement s'il est valide
                             comp.setLocation(position[i][j][0],position[i][j][1]);
                             flag = true;
+
+                            gm.game.board.turnEnd();
                         }
 
                     }

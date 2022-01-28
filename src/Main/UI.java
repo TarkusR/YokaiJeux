@@ -146,8 +146,8 @@ public class UI {
 
                     case "validNewGame" : gm.sChanger.showGamePanel();break;
                     case "drawClue":gm.game.board.drawClue();break;
-                    case "apaiser" : gm.game.board.apaiser = true;break;
-                    case "non": gm.game.tour++;break;
+                    case "apaiser" : gm.game.board.endGame();break;
+                    case "non": gm.game.board.turnCheck();break;
 
                 }
             }

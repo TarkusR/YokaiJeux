@@ -21,7 +21,11 @@ public class Game {
     /* Type de partie (en ligne ou local) */
     public String gameType;
 
+    public boolean canCheckCard = false;
     public boolean canMoveCard = false;
+    public boolean canMoveClue = false;
+
+    public boolean ending = false;
 
     public Board board;
     public int tour = 0;
