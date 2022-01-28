@@ -11,6 +11,7 @@ public class Card {
 
     private CardClue clue;
     public boolean isFixed = false;
+    public boolean isReturned = false;
 
     public String clueType;
 

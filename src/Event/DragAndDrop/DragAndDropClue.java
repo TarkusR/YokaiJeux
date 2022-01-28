@@ -1,6 +1,7 @@
 package Event.DragAndDrop;
 
 import Main.GameManager;
+import com.gamelogic.yokai.CardClue;
 import com.gamelogic.yokai.Position;
 
 import java.awt.*;
@@ -11,13 +12,13 @@ public class DragAndDropClue extends MouseAdapter {
     GameManager gm;
     private Point initialLoc;
     private Point initialLocOnScreen;
-    public int[][][] positionCard ;
+    public int[][][] position ;
     public int[][][]positionCardClue;
 
 
     public DragAndDropClue(GameManager gm){
         this.gm=gm;
-        this.positionCard = gm.game.board.position;
+        this.position = gm.game.board.position;
         this.positionCardClue=gm.game.board.positionClue;
     }
 
@@ -38,12 +39,9 @@ public class DragAndDropClue extends MouseAdapter {
         int y = locOnScreen.y - initialLocOnScreen.y + initialLoc.y;
 
         for(int i = 0 ; i< positionCardClue.length;i++) {
-            for(int j = 0; j < positionCardClue.length;j++){
+            for(int j = 0; j < positionCardClue[1].length;j++){
                 if(initialLoc.x<=positionCardClue[i][j][0]+50 && initialLoc.x>=positionCardClue[i][j][0]-50){
-
-
-                    if (initialLoc.y<=positionCardClue[i][j][1]+50 && initialLoc.y>=positionCardClue[i][j][1]-50){
-
+                    if (initialLoc.y<=position[i][j][1]+50 && initialLoc.y>=position[i][j][1]-50){
                         pastPosition = new Position(i,j);
                         flag=true;
                     }
@@ -57,20 +55,18 @@ public class DragAndDropClue extends MouseAdapter {
             }
         }
         flag = false;
-        for(int i = 0 ; i< positionCardClue.length-1;i++){
+        for(int i = 0 ; i< position[1].length;i++){
 
-            for(int j = 0; j < positionCardClue.length-1;j++){
-                if(x<=positionCardClue[i][j][0]+50 && x>=positionCardClue[i][j][0]-50){
+            for(int j = 0; j < position[1].length;j++){
+                if(x<=position[i][j][0]+50 && x>=position[i][j][0]-50){
 
-                    if (y<=positionCardClue[i][j][1]+50 && y>=positionCardClue[i][j][1]-50){
-                        if(gm.game.board.getGrid()[i][j]==gm.game.board.nullCard){
+                    if (y<=position[i][j][1]+50 && y>=position[i][j][1]-50){
+                        if(gm.game.board.getGrid()[i][j] != gm.game.board.nullCard&& gm.game.canMoveCard){
                             int cor1 = i;
                             int cor2 = j;
                             Position newPosition = new Position(cor1,cor2);
-
                             // appliquer le mouvement s'il est valide
-                            if (gm.game.board.moveYokai(pastPosition, newPosition))
-                                comp.setLocation(positionCardClue[i][j][0],positionCardClue[i][j][1]);
+                            comp.setLocation(position[i][j][0],position[i][j][1]);
                             flag = true;
                         }
 

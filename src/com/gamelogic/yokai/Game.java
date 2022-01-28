@@ -1,6 +1,7 @@
 package com.gamelogic.yokai;
 
 import Main.GameManager;
+import Main.UI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +9,10 @@ import java.util.Scanner;
 
 public class Game {
 
+    GameManager gm;
+
     /*Niveau de la partie*/
     public int level;
-
     /* Nombre de joueur */
     public int playerCount;
 
@@ -19,8 +21,10 @@ public class Game {
     /* Type de partie (en ligne ou local) */
     public String gameType;
 
-    public Board board;
+    public boolean canMoveCard = false;
 
+    public Board board;
+    public int tour = 0;
 
     /* Getter et Setter */
     public int getLevel() {
@@ -30,7 +34,7 @@ public class Game {
     public void setLevel(int level) {
         this.level = level;
     }
-
+    public boolean endgame = false;
     public int getPlayerCount() {
         return playerCount;
     }
@@ -55,8 +59,20 @@ public class Game {
         this.gameType = gameType;
         this.player = player;
         this.board = new Board(playerCount,gm);
+        this.gm = gm;
+    }
+
+    public void setGm(GameManager gm) {
+        this.gm = gm;
+    }
+
+    public void play(){
+
+
 
     }
+
+
 
     public void endgame() {
 

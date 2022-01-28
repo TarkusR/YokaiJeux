@@ -1,15 +1,8 @@
 package com.gamelogic.yokai;
 
-import java.util.List;
-import java.util.Vector;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Collections;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
+
+import Event.DragAndDrop.DragAndDropClue;
 import Main.GameManager;
 
 import javax.swing.*;
@@ -43,7 +36,8 @@ public class Board {
     public int[][][] position;
     public int[][][] positionClue;
     private List<JLabel> labels;
-
+    private List<JLabel> labelsYokai;
+    public boolean apaiser = false;
     private Set<Card> neighbours = new HashSet<>();
     private Map<String, Set<Card>> family = new HashMap<>();
 
@@ -197,13 +191,14 @@ public class Board {
             return false;
 
         // mouvement
-
+        labelsYokai.add((newY*SIZE)+newX,labelsYokai.get((pastY*SIZE)+pastX));
+        labelsYokai.remove(((pastY*SIZE)+pastX));
         Card temp = grid[pastY][pastX];
         grid[pastY][pastX] = nullCard;
         grid[newY][newX] = temp;
         System.out.println();
         printGrid();
-
+        System.out.println(apaise());
         return true;
     }
 
@@ -273,14 +268,13 @@ public class Board {
                 do {
                     Collections.shuffle(colors);
                     newClue = colors.subList(0, amountColors);
-                } while (clues.contains(newClue));
+                }while (clues.contains(newClue));
 
                 Collections.sort(newClue);
                 Collections.sort(newClue);
                 tempDeck.add(String.join("+", newClue));
             }
         }
-
         // mélange du deck
         Collections.shuffle(tempDeck);
 
@@ -288,10 +282,10 @@ public class Board {
 
         for (int i = 0; i < tempDeck.size(); i++) {
             CardClue clue = new CardClue(tempDeck.get(i));
+            System.out.println(tempDeck.get(i));
             clue.setClueType(tempDeck.get(i));
             deck.add(clue);
         }
-
         System.out.println(tempDeck);
     }
 
@@ -300,7 +294,7 @@ public class Board {
         gm.ui.window.setSize(1900,1000);
         grid = new Card[SIZE][SIZE];
         position = new int[SIZE+1][SIZE+1][2];
-        clueGrid = new CardClue[2][5];
+        clueGrid = new CardClue[2][6];
 
         family.put("Ka", new HashSet<>());
         family.put("Ki", new HashSet<>());
@@ -331,7 +325,7 @@ public class Board {
         }
 
         // initialisation du deck de cartes indices
-
+        playerCount = gm.ui.playerAmount;
         switch (playerCount) {
             case 2:
                 createDeck(2,3,2);
@@ -349,40 +343,43 @@ public class Board {
 
         // Creation grille carte indice
 
-        for(int i =0; i< 2;i++){
-            for(int j= 0; j<5;j++ ){
-                if((i+j)>=clueGrid.length){
-                    clueGrid[i][j] = deck.get(i+j);
+        for(int i = 0; i< 2;i++){
+            for(int j= 1; j<=5;j++ ){
+                if(((i*5)+j)<=deck.size()){
+                    System.out.println(deck.size());
+                    System.out.println((i*5)+j);
+                    clueGrid[i][j] = deck.get((i*5)+j-1);
                 }else{
                     clueGrid[i][j]= nullCardClue;
                 }
             }
         }
         positionClue = new int[clueGrid.length][clueGrid[1].length][2];
+
     }
 
  public void createGridUI(GameManager gm){
-     int posX = 1300;
+     int posX = 1250;
      int posY =750;
      int incr = 4;
      int incr2= 0;
      labels = new ArrayList<>();
+     labelsYokai = new ArrayList<>();
      gm.ui.createObject(4,1425,400,100,150,"/res/gamePanel/carteTexture/deckIndice.png","drawClue");
      for(int i=0;i<2;i++){
 
-         for(int j = 0; j< 5;j++){
+         for(int j = 0; j<=5;j++){
 
-            if(clueGrid[i][j]!= nullCard){
+            if(clueGrid[i][j] != nullCard && clueGrid[i][j]!= null){
                 //Debugage
                 //System.out.println();
                 //UI
-                System.out.println(i);
-                System.out.println("yes");
+                gm.ui.dragAndDropClue=new DragAndDropClue(gm);
+                System.out.println(clueGrid.length);
                 positionClue[i][j][0]= posX;
                 positionClue[i][j][1]=posY;
-                System.out.println(deck.get(i+j).getClueType());
                 incr++;
-                switch(deck.get(i+j).getClueType()){
+                switch(clueGrid[i][j].getClueType()){
 
                     case "bleu" :labels.add(gm.ui.createMovableObject(4,posX,posY,100,100,"/res/gamePanel/carteTexture/blue.png",gm.ui.dragAndDropClue));break;
                     case "bleu+rouge" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuRouge.png",gm.ui.dragAndDropClue));break;
@@ -390,7 +387,7 @@ public class Board {
                     case "bleu+vert" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuVert.png",gm.ui.dragAndDropClue));break;
                     case "bleu+vert+violet" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuVertViolet.png",gm.ui.dragAndDropClue));break;
                     case "bleu+violet" :labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuViolet.png",gm.ui.dragAndDropClue));break;
-                    case "bleu+violet+rouge" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuVioletRouge.png",gm.ui.dragAndDropClue));break;
+                    case "bleu+rouge+violet" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/bleuVioletRouge.png",gm.ui.dragAndDropClue));break;
                     case "rouge" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/rouge.png",gm.ui.dragAndDropClue));break;
                     case "vert" : labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/vert.png",gm.ui.dragAndDropClue)); break;
                     case "rouge+vert": labels.add(gm.ui.createMovableObject(4,posX,posY,100 ,100,"/res/gamePanel/carteTexture/vertRouge.png",gm.ui.dragAndDropClue));break;
@@ -408,7 +405,7 @@ public class Board {
 
             posX+=100;
          }
-         posX = 1300;
+         posX = 1250;
          posY-=100;
 
 
@@ -416,6 +413,7 @@ public class Board {
      for(int i = 0 ;i< labels.size();i++){
          labels.get(i).setVisible(false);
      }
+     System.out.println(labels.size());
 
 
 
@@ -435,8 +433,7 @@ public class Board {
 
                  position[i][j][0] = posX;
                  position[i][j][1] = posY;
-                 gm.ui.createMovableObject(4,posX,posY,80 ,80,"/res/gamePanel/carteTexture/carteFaceCachee.png",gm.ui.dragAndDropBoard);
-
+                 labelsYokai.add(gm.ui.createMovableObject(4,posX,posY,80 ,80,"/res/gamePanel/carteTexture/carteFaceCachee.png",gm.ui.dragAndDropBoard));
                  //mettre carte face cachée
 
              }else{
@@ -447,6 +444,7 @@ public class Board {
 
                  position[i][j][0] = posX;
                  position[i][j][1] = posY;
+                 labelsYokai.add(null);
                  //gm.ui.createMovableObject(4,posX,posY,150 ,150,"/res/gamePanel/carteTexture/carteVide.png");
                  //mettre carte vide
              }
@@ -462,17 +460,71 @@ public class Board {
          System.out.println();
 
      }
+     tour();
     }
 
     public void drawClue(){
         if(labels.size()>clueDraw){
             labels.get(clueDraw).setVisible(true);
+            System.out.println(clueDraw);
             clueDraw++;
-            return;
         }else{
             noIndiceLeft = true;
-            return;
         }
+    }
+
+    public static void wait(int ms)
+    {
+        try
+        {
+            Thread.sleep(ms);
+        }
+        catch(InterruptedException ex)
+        {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    public void returnCard(int i , int j) throws InterruptedException {
+        String cardType = grid[i][j].getCardType();
+        System.out.println(j+" "+i);
+        System.out.println(labelsYokai.size());
+        switch(cardType){
+            case "Ka" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteVerte.png"))));break;
+            case "Ro" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteViolette.png"))));break;
+            case "Ki" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteRouge.png"))));break;
+            case "O" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteBleu.png"))));break;
+        }
+        grid[i][j].isReturned=true;
+        //wait(5000);
+    }
+
+    public void returnCardCachee(int i, int j){
+        String cardType = grid[i][j].getCardType();
+        if(grid[i][j].isReturned){
+            System.out.println(j+" "+i);
+            System.out.println(labelsYokai.size());
+            labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteFaceCachee.png"))));
+        }
+    }
+
+    public void tour(){
+        if(!gm.game.board.apaiser && !gm.game.board.apaise()){
+            gm.ui.labelsUI.get(0).setVisible(true);
+            gm.ui.labelsUI.get(1).setVisible(true);
+            gm.ui.labelsUI.get(2).setVisible(true);
+        }else{
+            gm.game.endgame = true;
+        }
+        while(gm.game.tour!= gm.game.tour+1){
+            gm.game.canMoveCard = false;
+        }
+        gm.game.canMoveCard = true;
+        gm.ui.labelsUI.get(0).setVisible(false);
+        gm.ui.labelsUI.get(1).setVisible(false);
+        gm.ui.labelsUI.get(2).setVisible(false);
+        gm.ui.labelsUI.get(3).setVisible(true);
+
 
     }
 }

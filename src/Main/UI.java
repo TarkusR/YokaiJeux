@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class UI {
-    GameManager gm;
+    public GameManager gm;
     public DragAndDropBoard dragAndDropBoard;
     public DragAndDropClue dragAndDropClue;
     public JFrame window ;
@@ -27,7 +27,7 @@ public class UI {
     public int difficulty = 1;
     public String gameType = "null";
     public Player scoreName = new Player("");
-
+    public List<JLabel> labelsUI;
     private List<JLabel> labels;
 
     public UI(GameManager gm){
@@ -145,8 +145,9 @@ public class UI {
                     case "expert"    : radioChange("difficulty", 4);break;
 
                     case "validNewGame" : gm.sChanger.showGamePanel();break;
-                    case "drawClue":
-                        gm.game.board.drawClue();break;
+                    case "drawClue":gm.game.board.drawClue();break;
+                    case "apaiser" : gm.game.board.apaiser = true;break;
+                    case "non": gm.game.tour++;break;
 
                 }
             }
@@ -172,7 +173,7 @@ public class UI {
 
     public JLabel createMovableObject(int bgNumber, int objx, int objy, int objWidth, int objHeight, String objFileName, MouseAdapter dragDropController){
         dragAndDropBoard=new DragAndDropBoard(gm);
-        dragAndDropClue = new DragAndDropClue(gm);
+
         Border outsideBorder = new LineBorder(Color.black);
         Border insideBorder = new EmptyBorder(10,0,10,10);
         JLabel objectLabel = new JLabel();
@@ -240,8 +241,17 @@ public class UI {
 
         bgPanel[3].add(bgLabel[3]);
 
+        labelsUI = new ArrayList<>();
         //Ecran de jeu
         createGridBackground(4,"/res/gamePanel/background.png",Color.black);
+        labelsUI.add(createObject(4,100,500,350,40,"/res/gamePanel/carteTexture/appaiser.png","apaiser"));
+        labelsUI.add(createObject(4,150,425,350,40,"/res/gamePanel/carteTexture/apaiserQuestion.png","null"));
+        labelsUI.add(createObject(4,450,500,350,40,"/res/gamePanel/carteTexture/non.png","non"));
+        labelsUI.add(createObject(4,150,425,350,40,"/res/gamePanel/carteTexture/regarder2Cartes.png","null"));
+        labelsUI.add(createObject(4,150,425,350,40,"/res/gamePanel/carteTexture/retournerOP.png","null"));
+        for(int i = 0;i<labelsUI.size();i++){
+            labelsUI.get(i).setVisible(false);
+        }
 
         bgPanel[4].add(bgLabel[4]);
     }

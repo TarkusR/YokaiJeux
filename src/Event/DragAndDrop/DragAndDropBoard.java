@@ -22,6 +22,28 @@ public class DragAndDropBoard extends MouseAdapter {
     }
 
     @Override
+    public void mouseClicked(MouseEvent e){
+        Component comp = (Component)e.getSource();
+        Point locOnScreen = e.getLocationOnScreen();
+        boolean flag = false;
+        int x = locOnScreen.x - initialLocOnScreen.x + initialLoc.x;
+        int y = locOnScreen.y - initialLocOnScreen.y + initialLoc.y;
+        for(int i = 0 ; i< position[1].length;i++) {
+            for (int j = 0; j < position[1].length; j++) {
+                if (initialLoc.x <= position[i][j][0] + 50 && initialLoc.x >= position[i][j][0] - 50) {
+                    if (initialLoc.y <= position[i][j][1] + 50 && initialLoc.y >= position[i][j][1] - 50) {
+                        try {
+                            gm.game.board.returnCard(i,j);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public void mousePressed(MouseEvent e) {
         Component comp = (Component)e.getSource();
         initialLoc = comp.getLocation();
@@ -62,7 +84,7 @@ public class DragAndDropBoard extends MouseAdapter {
                     if(x<=position[i][j][0]+50 && x>=position[i][j][0]-50){
 
                         if (y<=position[i][j][1]+50 && y>=position[i][j][1]-50){
-                            if(gm.game.board.getGrid()[i][j]==gm.game.board.nullCard){
+                            if(gm.game.board.getGrid()[i][j]==gm.game.board.nullCard&& gm.game.canMoveCard){
                                 int cor1 = i;
                                 int cor2 = j;
                                 Position newPosition = new Position(cor1,cor2);
