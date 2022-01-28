@@ -551,11 +551,25 @@ public class Board {
     }
 
     public void endGame() {
+        Card card;
+
         gm.ui.labelsUI.get(0).setVisible(false); // bouton apaisé
         gm.ui.labelsUI.get(1).setVisible(false); // question : "apaisé ?"
         gm.ui.labelsUI.get(2).setVisible(false); // bouton non
 
         gm.game.ending = true;
+
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                card = grid[j][i];
+                switch(card.getCardType()){
+                    case "Ka" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteVerte.png"))));break;
+                    case "Ro" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteViolette.png"))));break;
+                    case "Ki" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteRouge.png"))));break;
+                    case "O" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteBleu.png"))));break;
+                }
+            }
+        }
 
         if (apaise()) {
             System.out.println("GAGNE");
