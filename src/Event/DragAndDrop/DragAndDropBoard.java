@@ -23,11 +23,11 @@ public class DragAndDropBoard extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e){
-        System.out.println(gm.game.canCheckCard);
-        System.out.println(gm.game.canMoveCard);
-        System.out.println(gm.game.canMoveClue);
-        System.out.println(gm.game.board.mustHide);
-        System.out.println();
+        //System.out.println(gm.game.canCheckCard);
+        //System.out.println(gm.game.canMoveCard);
+        //System.out.println(gm.game.canMoveClue);
+        //System.out.println(gm.game.board.mustHide);
+        //System.out.println();
 
         Component comp = (Component)e.getSource();
         Point locOnScreen = e.getLocationOnScreen();

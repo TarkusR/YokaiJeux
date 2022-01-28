@@ -64,7 +64,7 @@ public class Board {
             for (int j = 0; j < grid.length; j++) {
 
                 //debugage
-                System.out.print("|");
+                //System.out.print("|");
                 if (grid[i][j] != nullCard) {
                     //debugage
                     System.out.print(grid[i][j].getCardType());
@@ -75,7 +75,7 @@ public class Board {
 
                 } else {
                     //debugage
-                    System.out.print(" ");
+                    //System.out.print(" ");
                     //UI
 
 
@@ -83,12 +83,12 @@ public class Board {
                     //mettre carte vide
                 }
                 //debugage
-                System.out.print("|");
+                //System.out.print("|");
 
 
             }
 
-            System.out.println();
+            //System.out.println();
 
         }
     }
@@ -202,9 +202,9 @@ public class Board {
         Card temp = grid[pastY][pastX];
         grid[pastY][pastX] = nullCard;
         grid[newY][newX] = temp;
-        System.out.println();
-        printGrid();
-        System.out.println(apaise());
+        //System.out.println();
+        //printGrid();
+        //System.out.println(apaise());
 
         turnIndice();
 
@@ -291,11 +291,11 @@ public class Board {
 
         for (int i = 0; i < tempDeck.size(); i++) {
             CardClue clue = new CardClue(tempDeck.get(i));
-            System.out.println(tempDeck.get(i));
+            //System.out.println(tempDeck.get(i));
             clue.setClueType(tempDeck.get(i));
             deck.add(clue);
         }
-        System.out.println(tempDeck);
+        //System.out.println(tempDeck);
     }
 
     public Board(int playerCount, GameManager gm) {
@@ -355,8 +355,8 @@ public class Board {
         for(int i = 0; i< 2;i++){
             for(int j= 1; j<=5;j++ ){
                 if(((i*5)+j)<=deck.size()){
-                    System.out.println(deck.size());
-                    System.out.println((i*5)+j);
+                    //System.out.println(deck.size());
+                    //System.out.println((i*5)+j);
                     clueGrid[i][j] = deck.get((i*5)+j-1);
                 }else{
                     clueGrid[i][j]= nullCardClue;
@@ -384,7 +384,7 @@ public class Board {
                 //System.out.println();
                 //UI
                 gm.ui.dragAndDropClue=new DragAndDropClue(gm);
-                System.out.println(clueGrid.length);
+                //System.out.println(clueGrid.length);
                 positionClue[i][j][0]= posX;
                 positionClue[i][j][1]=posY;
                 incr++;
@@ -422,7 +422,7 @@ public class Board {
      for(int i = 0 ;i< labels.size();i++){
          labels.get(i).setVisible(false);
      }
-     System.out.println(labels.size());
+     //System.out.println(labels.size());
 
 
 
@@ -434,10 +434,10 @@ public class Board {
          for(int j = 0; j< grid.length;j++){
 
              //debugage
-             System.out.print("|");
+             //System.out.print("|");
              if(grid[i][j] != nullCard){
                  //debugage
-                 System.out.print(grid[i][j].getCardType());
+                 //System.out.print(grid[i][j].getCardType());
                  //UI
 
                  position[i][j][0] = posX;
@@ -447,7 +447,7 @@ public class Board {
 
              }else{
                  //debugage
-                 System.out.print(" ");
+                 //System.out.print(" ");
                  //UI
 
 
@@ -458,7 +458,7 @@ public class Board {
                  //mettre carte vide
              }
              //debugage
-             System.out.print("|");
+             //System.out.print("|");
              posX+=100;
 
 
@@ -481,7 +481,7 @@ public class Board {
             labels.get(clueDraw).setVisible(true);
             prepareClue();
 
-            System.out.println(clueDraw);
+            //System.out.println(clueDraw);
             clueDraw++;
 
             turnEnd();
@@ -561,7 +561,7 @@ public class Board {
 
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
-                card = grid[j][i];
+                card = grid[i][j];
                 switch(card.getCardType()){
                     case "Ka" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteVerte.png"))));break;
                     case "Ro" : labelsYokai.get((i*SIZE)+j).setIcon(new ImageIcon(Objects.requireNonNull(getClass().getResource("/res/gamePanel/carteTexture/carteViolette.png"))));break;
