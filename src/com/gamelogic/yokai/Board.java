@@ -4,6 +4,7 @@ import java.util.*;
 
 import Event.DragAndDrop.DragAndDropClue;
 import Main.GameManager;
+import Main.UI;
 
 import javax.swing.*;
 
@@ -23,7 +24,7 @@ public class Board {
 
 
     /*Le tableau de jeu est un tableau de carte (on peut aussi y mettre les classe enfant de carte) et si la tile est vide les 2 seul attributs importants*/
-    GameManager gm;
+    GameManager gm = UI.gm;
     public List<CardClue> deck;
     public List<CardClue> preparedDeck;
     private Card[][] grid;
@@ -538,7 +539,6 @@ public class Board {
 
         System.out.println("Joueur " + gm.game.tour);
 
-        System.exit(0);
         
         gm.ui.labelsUI.get(0).setVisible(true); // bouton apaisé
         gm.ui.labelsUI.get(1).setVisible(true); // question : "apaisé ?"

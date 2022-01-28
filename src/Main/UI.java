@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class UI {
-    public GameManager gm;
+    public static GameManager gm;
     public DragAndDropBoard dragAndDropBoard;
     public DragAndDropClue dragAndDropClue;
     public JFrame window ;
