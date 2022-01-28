@@ -43,6 +43,9 @@ public class Board {
     private Map<String, Set<Card>> family = new HashMap<>();
 
     private int returned;
+    public boolean mustHide = false;
+    public int mustHidei;
+    public int mustHidej;
 
     /*Getter et Setter pour ceux-ci*/
 
@@ -517,6 +520,8 @@ public class Board {
 
         }
 
+        System.out.println(returned);
+
         if (returned == 2) {
             return true;
         }
@@ -561,6 +566,8 @@ public class Board {
 
     // Voir 2 cartes
     public void turnCheck() {
+        System.out.println("Regardez 2 cartes");
+
         gm.ui.labelsUI.get(0).setVisible(false); // bouton apaisé
         gm.ui.labelsUI.get(1).setVisible(false); // question : "apaisé ?"
         gm.ui.labelsUI.get(2).setVisible(false); // bouton non
@@ -571,12 +578,14 @@ public class Board {
 
     // Déplacer une carte
     public void turnMove() {
+        System.out.println("Déplacez 1 carte");
         gm.game.canCheckCard = false;
         gm.game.canMoveCard = true;
     }
 
     // Révéler indice ou en placer un
     public void turnIndice() {
+        System.out.println("Tirez un indice ou placez un indice");
         gm.game.canMoveCard = false;
         gm.game.canMoveClue = true;
     }

@@ -23,6 +23,12 @@ public class DragAndDropBoard extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e){
+        System.out.println(gm.game.canCheckCard);
+        System.out.println(gm.game.canMoveCard);
+        System.out.println(gm.game.canMoveClue);
+        System.out.println(gm.game.board.mustHide);
+        System.out.println();
+
         Component comp = (Component)e.getSource();
         Point locOnScreen = e.getLocationOnScreen();
         boolean flag = false;
@@ -36,12 +42,19 @@ public class DragAndDropBoard extends MouseAdapter {
                     if (initialLoc.x <= position[i][j][0] + 50 && initialLoc.x >= position[i][j][0] - 50) {
                         if (initialLoc.y <= position[i][j][1] + 50 && initialLoc.y >= position[i][j][1] - 50) {
                             try {
-                                gm.game.board.returnCard(i,j);
-                                wait(3000);
-                                System.out.println("waited");
-                                if (gm.game.board.returnCard(i,j))
-                                    System.out.println("ifd");
+                                if (gm.game.board.mustHide && (gm.game.board.mustHidei != i || gm.game.board.mustHidej != j))
+                                    return;
+
+                                gm.game.board.mustHide = !gm.game.board.mustHide;
+                                gm.game.board.mustHidei = i;
+                                gm.game.board.mustHidej = j;
+
+                                //gm.game.board.returnCard(i,j);
+                                //gm.game.board.wait(3000);
+                                //System.out.println("waited");
+                                if (gm.game.board.returnCard(i,j)) {
                                     gm.game.board.turnMove();
+                                }
                             } catch (InterruptedException ex) {
                                 ex.printStackTrace();
                             }
